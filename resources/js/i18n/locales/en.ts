@@ -1,0 +1,120 @@
+const en = {
+    common: {
+        save: 'Save',
+        cancel: 'Cancel',
+        delete: 'Delete',
+        confirm: 'Confirm',
+        loading: 'Loading...',
+        or: 'Or',
+        warning: 'Warning',
+        language: 'Language',
+        navigationMenu: 'Navigation menu',
+    },
+    languages: {
+        ja: '日本語',
+        en: 'English',
+        zh: '中文',
+    },
+    nav: {
+        dashboard: 'Dashboard',
+        platform: 'Platform',
+        repository: 'Repository',
+        documentation: 'Documentation',
+        settings: 'Settings',
+        logOut: 'Log out',
+        logIn: 'Log in',
+        register: 'Register',
+    },
+    welcome: {
+        title: 'Welcome',
+        word: 'Welcome',
+    },
+    auth: {
+        email: 'Email',
+        emailAddress: 'Email address',
+        password: 'Password',
+        confirmPassword: 'Confirm password',
+        name: 'Name',
+        fullName: 'Full name',
+        rememberMe: 'Remember me',
+        forgotPassword: 'Forgot your password?',
+        logIn: 'Log in',
+        register: 'Register',
+        signUp: 'Sign up',
+        createAccount: 'Create account',
+        alreadyHaveAccount: 'Already have an account?',
+        dontHaveAccount: "Don't have an account?",
+        loginTitle: 'Log in to your account',
+        loginDescription: 'Enter your email and password below to log in',
+        registerTitle: 'Create an account',
+        registerDescription: 'Enter your details below to create your account',
+        forgotPasswordTitle: 'Forgot password',
+        forgotPasswordDescription:
+            'Enter your email to receive a password reset link',
+        emailResetLink: 'Email password reset link',
+        orReturnTo: 'Or, return to',
+        resetPasswordTitle: 'Reset password',
+        resetPasswordDescription: 'Please enter your new password below',
+        resetPassword: 'Reset password',
+        confirmPasswordTitle: 'Confirm password',
+        confirmPasswordDescription:
+            'This is a secure area of the application. Please confirm your password before continuing.',
+        confirmPasswordButton: 'Confirm password',
+        confirming: 'Confirming...',
+        verifyEmailTitle: 'Email verification',
+        verifyEmailDescription:
+            'Please verify your email address by clicking on the link we just emailed to you.',
+        verificationLinkSent:
+            'A new verification link has been sent to the email address you provided during registration.',
+        resendVerificationEmail: 'Resend verification email',
+        recoveryCode: 'Recovery code',
+        recoveryCodeDescription:
+            'Please confirm access to your account by entering one of your emergency recovery codes.',
+        authenticationCode: 'Authentication code',
+        authenticationCodeDescription:
+            'Enter the authentication code provided by your authenticator application.',
+        loginUsingAuthCode: 'login using an authentication code',
+        loginUsingRecoveryCode: 'login using a recovery code',
+        continue: 'Continue',
+        orYouCan: 'or you can',
+        enterRecoveryCode: 'Enter recovery code',
+        twoFactorTitle: 'Two-factor authentication',
+    },
+    settings: {
+        title: 'Settings',
+        description: 'Manage your profile and account settings',
+        profile: 'Profile',
+        security: 'Security',
+        appearance: 'Appearance',
+        profileSettings: 'Profile settings',
+        profileDescription: 'Update your name and email address',
+        securitySettings: 'Security settings',
+        appearanceSettings: 'Appearance settings',
+        appearanceDescription:
+            'Update the appearance settings for your account',
+        updatePassword: 'Update password',
+        updatePasswordDescription:
+            'Ensure your account is using a long, random password to stay secure',
+        currentPassword: 'Current password',
+        newPassword: 'New password',
+        emailUnverified: 'Your email address is unverified.',
+        resendVerification:
+            'Click here to re-send the verification email.',
+        verificationLinkSentToEmail:
+            'A new verification link has been sent to your email address.',
+        deleteAccount: 'Delete account',
+        deleteAccountDescription:
+            'Delete your account and all of its resources',
+        deleteWarning:
+            'Please proceed with caution, this cannot be undone.',
+        deleteConfirmTitle:
+            'Are you sure you want to delete your account?',
+        deleteConfirmDescription:
+            'Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
+        light: 'Light',
+        dark: 'Dark',
+        system: 'System',
+    },
+} as const;
+
+export default en;

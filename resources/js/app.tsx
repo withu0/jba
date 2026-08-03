@@ -1,7 +1,9 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { LocaleSync } from '@/components/locale-sync';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
+import '@/i18n';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -23,9 +25,10 @@ createInertiaApp({
         }
     },
     strictMode: true,
-    withApp(app) {
+    withApp(app, { page }) {
         return (
             <TooltipProvider delayDuration={0}>
+                <LocaleSync initialLocale={page.props.locale} />
                 {app}
                 <Toaster />
             </TooltipProvider>
