@@ -26,8 +26,13 @@ const ja = {
         register: '新規登録',
     },
     welcome: {
-        title: 'ようこそ',
-        word: 'ようこそ',
+        title: '鍼道',
+        word: '鍼道',
+        bookLabel: 'ウェルカムブック',
+        prevPage: '前へ',
+        nextPage: '次へ',
+        coverLabel: '表紙',
+        pageLabel: '{{page}} / {{total}} ページ',
     },
     auth: {
         email: 'メール',

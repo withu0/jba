@@ -26,8 +26,13 @@ const en = {
         register: 'Register',
     },
     welcome: {
-        title: 'Welcome',
-        word: 'Welcome',
+        title: 'HARIDO',
+        word: 'HARIDO',
+        bookLabel: 'Welcome book',
+        prevPage: 'Previous',
+        nextPage: 'Next',
+        coverLabel: 'Cover',
+        pageLabel: 'Page {{page}} of {{total}}',
     },
     auth: {
         email: 'Email',

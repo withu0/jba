@@ -141,3 +141,22 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* react-pageflip: keep page turns, hide hover scrollbars */
+.welcome-flipbook,
+.welcome-flipbook .stf__parent,
+.welcome-flipbook .stf__wrapper,
+.welcome-flipbook .stf__block,
+.welcome-flipbook .stf__item {
+    overflow: hidden !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: none;
+}
+
+.welcome-flipbook::-webkit-scrollbar,
+.welcome-flipbook *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}

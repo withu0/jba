@@ -26,8 +26,13 @@ const zh = {
         register: '注册',
     },
     welcome: {
-        title: '欢迎',
-        word: '欢迎',
+        title: 'HARIDO',
+        word: 'HARIDO',
+        bookLabel: '欢迎手册',
+        prevPage: '上一页',
+        nextPage: '下一页',
+        coverLabel: '封面',
+        pageLabel: '第 {{page}} / {{total}} 页',
     },
     auth: {
         email: '邮箱',
