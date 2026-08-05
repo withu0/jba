@@ -160,3 +160,17 @@
     width: 0;
     height: 0;
 }
+
+.zoom-pan-viewport {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: none;
+}
+
+.zoom-pan-viewport::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}

@@ -33,6 +33,13 @@ const ja = {
         nextPage: '次へ',
         coverLabel: '表紙',
         pageLabel: '{{page}} / {{total}} ページ',
+        enlarge: '拡大',
+        enlargeTitle: '拡大表示',
+        closeEnlarge: '拡大表示を閉じる',
+        enlargeHint: 'マウスを動かすと見たい場所へ移動します。スマホではドラッグで移動できます。',
+        zoomIn: '拡大',
+        zoomOut: '縮小',
+        zoomReset: 'リセット',
     },
     auth: {
         email: 'メール',

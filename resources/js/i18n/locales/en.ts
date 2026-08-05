@@ -33,6 +33,13 @@ const en = {
         nextPage: 'Next',
         coverLabel: 'Cover',
         pageLabel: 'Page {{page}} of {{total}}',
+        enlarge: 'Enlarge',
+        enlargeTitle: 'Enlarged view',
+        closeEnlarge: 'Close enlarged view',
+        enlargeHint: 'Move the mouse to look around. On phones, drag to pan.',
+        zoomIn: 'Zoom in',
+        zoomOut: 'Zoom out',
+        zoomReset: 'Reset',
     },
     auth: {
         email: 'Email',

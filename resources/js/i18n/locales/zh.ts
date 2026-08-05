@@ -33,6 +33,13 @@ const zh = {
         nextPage: '下一页',
         coverLabel: '封面',
         pageLabel: '第 {{page}} / {{total}} 页',
+        enlarge: '放大',
+        enlargeTitle: '放大查看',
+        closeEnlarge: '关闭放大视图',
+        enlargeHint: '移动鼠标可查看各处。手机上可拖动查看。',
+        zoomIn: '放大',
+        zoomOut: '缩小',
+        zoomReset: '重置',
     },
     auth: {
         email: '邮箱',
