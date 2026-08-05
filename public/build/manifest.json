@@ -260,7 +260,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-DpGXK9N7.css",
+    "file": "assets/app-_J5nbUN9.css",
     "name": "app",
     "names": [
       "app.css"
@@ -269,7 +269,7 @@
     "isEntry": true
   },
   "resources/js/app.tsx": {
-    "file": "assets/app-BID6G7uX.js",
+    "file": "assets/app-s8DRzBeE.js",
     "name": "app",
     "src": "resources/js/app.tsx",
     "isEntry": true,
@@ -488,7 +488,7 @@
     ]
   },
   "resources/js/pages/welcome.tsx": {
-    "file": "assets/welcome-Bo0gsNZA.js",
+    "file": "assets/welcome-BIcunlM6.js",
     "name": "welcome",
     "src": "resources/js/pages/welcome.tsx",
     "isDynamicEntry": true,

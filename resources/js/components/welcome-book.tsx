@@ -363,7 +363,7 @@ export function WelcomeBook({ className }: { className?: string }) {
                 )}
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
                 <button
                     type="button"
                     onClick={flipPrev}
