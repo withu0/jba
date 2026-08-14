@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Seed the application's database.
+     *
+     * Domain seeders are added by each implementation section as separate classes.
+     * Call them from here when created — see docs/implementation/SEEDING.md.
      */
     public function run(): void
     {
@@ -20,6 +23,18 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        ]);
+
+        $this->call([
+            AdminSeeder::class,
+            PageContentSeeder::class,
+            NewsSeeder::class,
+            InterviewSeeder::class,
+            BeforeAfterSeeder::class,
+            MangaPageSeeder::class,
+            LessonCategorySeeder::class,
+            LessonSeeder::class,
+            ContactSeeder::class,
         ]);
     }
 }

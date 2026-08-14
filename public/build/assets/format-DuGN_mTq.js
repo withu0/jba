@@ -1,0 +1,1 @@
+function e(e,t){if(!e)return``;try{return new Intl.DateTimeFormat(t,{year:`numeric`,month:`long`,day:`numeric`}).format(new Date(e))}catch{return e}}function t(e){if(!e)return``;let t=new Date(e);if(Number.isNaN(t.getTime()))return e;let n=`${t.getMonth()+1}`.padStart(2,`0`),r=`${t.getDate()}`.padStart(2,`0`);return`${t.getFullYear()}.${n}.${r}`}export{t as n,e as t};

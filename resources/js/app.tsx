@@ -4,18 +4,43 @@ import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import '@/i18n';
+import AdminLayout from '@/layouts/admin-layout';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
+import PublicLayout from '@/layouts/public-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+const publicPages = new Set([
+    'home',
+    'manga/index',
+    'manga/show',
+    'placeholder',
+    'static-page',
+    'news/index',
+    'news/show',
+    'interviews/index',
+    'interviews/show',
+    'before-after',
+]);
+
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => {
+        if (!title || title === appName) {
+            return appName;
+        }
+
+        return title.includes(appName) ? title : `${title} - ${appName}`;
+    },
     layout: (name) => {
         switch (true) {
-            case name === 'welcome':
-                return null;
+            case publicPages.has(name):
+                return PublicLayout;
+            case name === 'admin/login':
+                return AuthLayout;
+            case name.startsWith('admin/'):
+                return AdminLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
@@ -35,7 +60,7 @@ createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#349CCA',
     },
 });
 

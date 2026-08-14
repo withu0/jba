@@ -26,3 +26,8 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Keep requirements/design local; track implementation prompts/roadmap
+/docs/*
+!/docs/implementation/
+!/docs/implementation/**

@@ -17,10 +17,7 @@ type Props = {
     variant?: 'icon' | 'button';
 };
 
-export function LanguageSwitcher({
-    className,
-    variant = 'icon',
-}: Props) {
+export function LanguageSwitcher({ className, variant = 'icon' }: Props) {
     const { t } = useTranslation();
     const { locale } = usePage().props;
     const currentLocale = (locale as Locale) || 'ja';

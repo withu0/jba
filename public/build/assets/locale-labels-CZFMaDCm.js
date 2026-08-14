@@ -1,0 +1,1 @@
+var e={ja:`日本語`,en:`English`,zh:`中文`};export{e as t};

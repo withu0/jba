@@ -40,6 +40,7 @@ export default function Register({ passwordRules }: Props) {
                                     autoComplete="name"
                                     name="name"
                                     placeholder={t('auth.fullName')}
+                                    className="h-11 rounded-md bg-surface"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -59,6 +60,7 @@ export default function Register({ passwordRules }: Props) {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
+                                    className="h-11 rounded-md bg-surface"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -99,7 +101,8 @@ export default function Register({ passwordRules }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                size="lg"
+                                className="mt-2 w-full rounded-md"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >

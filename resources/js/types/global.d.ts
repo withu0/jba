@@ -15,6 +15,18 @@ declare module '@inertiajs/core' {
             availableLocales: string[];
             auth: Auth;
             sidebarOpen: boolean;
+            seo: {
+                title: string;
+                description: string;
+                image: string;
+                url: string;
+                type: string;
+                siteName: string;
+                locale: string;
+                alternateLocales: string[];
+                publishedAt: string | null;
+                robots: string;
+            };
             [key: string]: unknown;
         };
     }

@@ -18,8 +18,7 @@ export function Breadcrumbs({
 }) {
     const { t, i18n } = useTranslation();
 
-    const label = (title: string) =>
-        i18n.exists(title) ? t(title) : title;
+    const label = (title: string) => (i18n.exists(title) ? t(title) : title);
 
     return (
         <>

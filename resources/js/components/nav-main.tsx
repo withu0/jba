@@ -10,13 +10,19 @@ import {
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { NavItem } from '@/types';
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
+export function NavMain({
+    items = [],
+    label,
+}: {
+    items: NavItem[];
+    label?: string;
+}) {
     const { isCurrentUrl } = useCurrentUrl();
     const { t } = useTranslation();
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>{t('nav.platform')}</SidebarGroupLabel>
+            <SidebarGroupLabel>{label ?? t('nav.platform')}</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>

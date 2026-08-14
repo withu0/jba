@@ -1,90 +1,82 @@
 {
   "version": 1,
   "style": {
-    "file": "assets/fonts-C9MNnjVw.css",
+    "file": "assets/fonts-B_7ik_p5.css",
     "familyStyles": {
-      "instrument-sans": "@font-face {\n  font-family: \"Instrument Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n  src: url(\"/build/assets/instrument-sans-400-normal-DRC__1Mx.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;\n}\n\n@font-face {\n  font-family: \"Instrument Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n  src: url(\"/build/assets/instrument-sans-400-normal-D1W7dsQl.woff\") format(\"woff\");\n  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;\n}\n\n@font-face {\n  font-family: \"Instrument Sans\";\n  font-style: normal;\n  font-weight: 500;\n  font-display: swap;\n  src: url(\"/build/assets/instrument-sans-500-normal-Dk9ku72i.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;\n}\n\n@font-face {\n  font-family: \"Instrument Sans\";\n  font-style: normal;\n  font-weight: 500;\n  font-display: swap;\n  src: url(\"/build/assets/instrument-sans-500-normal-Z6ESRlEs.woff\") format(\"woff\");\n  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;\n}\n\n@font-face {\n  font-family: \"Instrument Sans\";\n  font-style: normal;\n  font-weight: 600;\n  font-display: swap;\n  src: url(\"/build/assets/instrument-sans-600-normal-B7fBEWYG.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;\n}\n\n@font-face {\n  font-family: \"Instrument Sans\";\n  font-style: normal;\n  font-weight: 600;\n  font-display: swap;\n  src: url(\"/build/assets/instrument-sans-600-normal-B9e8oLYv.woff\") format(\"woff\");\n  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;\n}\n\n.font-instrument-sans {\n  font-family: var(--font-instrument-sans);\n}"
+      "sans": "@font-face {\n  font-family: \"Noto Sans\";\n  font-style: normal;\n  font-weight: 300;\n  font-display: swap;\n  src: url(\"/build/assets/noto-sans-variable-normal-BYSzYMf3.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n  src: url(\"/build/assets/noto-sans-variable-normal-BYSzYMf3.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n@font-face {\n  font-family: \"Noto Sans\";\n  font-style: normal;\n  font-weight: 500;\n  font-display: swap;\n  src: url(\"/build/assets/noto-sans-variable-normal-BYSzYMf3.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n.font-sans {\n  font-family: var(--font-sans);\n}",
+      "serif": "@font-face {\n  font-family: \"Noto Serif\";\n  font-style: normal;\n  font-weight: 700;\n  font-display: swap;\n  src: url(\"/build/assets/noto-serif-700-normal-CIw17UNa.woff2\") format(\"woff2\");\n  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n}\n\n.font-serif {\n  font-family: var(--font-serif);\n}"
     },
     "variables": {
-      "instrument-sans": "--font-instrument-sans: \"Instrument Sans\";"
+      "sans": "--font-sans: \"Noto Sans\";",
+      "serif": "--font-serif: \"Noto Serif\";"
     }
   },
   "preloads": [
     {
-      "alias": "instrument-sans",
-      "family": "Instrument Sans",
-      "weight": 400,
+      "alias": "sans",
+      "family": "Noto Sans",
+      "weight": 300,
       "style": "normal",
-      "file": "assets/instrument-sans-400-normal-DRC__1Mx.woff2",
+      "file": "assets/noto-sans-variable-normal-BYSzYMf3.woff2",
       "as": "font",
       "type": "font/woff2",
       "crossorigin": "anonymous"
     },
     {
-      "alias": "instrument-sans",
-      "family": "Instrument Sans",
-      "weight": 500,
+      "alias": "serif",
+      "family": "Noto Serif",
+      "weight": 700,
       "style": "normal",
-      "file": "assets/instrument-sans-500-normal-Dk9ku72i.woff2",
-      "as": "font",
-      "type": "font/woff2",
-      "crossorigin": "anonymous"
-    },
-    {
-      "alias": "instrument-sans",
-      "family": "Instrument Sans",
-      "weight": 600,
-      "style": "normal",
-      "file": "assets/instrument-sans-600-normal-B7fBEWYG.woff2",
+      "file": "assets/noto-serif-700-normal-CIw17UNa.woff2",
       "as": "font",
       "type": "font/woff2",
       "crossorigin": "anonymous"
     }
   ],
   "families": {
-    "instrument-sans": {
-      "family": "Instrument Sans",
-      "variable": "--font-instrument-sans",
+    "sans": {
+      "family": "Noto Sans",
+      "variable": "--font-sans",
       "variants": {
+        "300:normal": {
+          "files": [
+            {
+              "file": "assets/noto-sans-variable-normal-BYSzYMf3.woff2",
+              "format": "woff2",
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+            }
+          ]
+        },
         "400:normal": {
           "files": [
             {
-              "file": "assets/instrument-sans-400-normal-DRC__1Mx.woff2",
+              "file": "assets/noto-sans-variable-normal-BYSzYMf3.woff2",
               "format": "woff2",
-              "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
-            },
-            {
-              "file": "assets/instrument-sans-400-normal-D1W7dsQl.woff",
-              "format": "woff",
-              "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
             }
           ]
         },
         "500:normal": {
           "files": [
             {
-              "file": "assets/instrument-sans-500-normal-Dk9ku72i.woff2",
+              "file": "assets/noto-sans-variable-normal-BYSzYMf3.woff2",
               "format": "woff2",
-              "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
-            },
-            {
-              "file": "assets/instrument-sans-500-normal-Z6ESRlEs.woff",
-              "format": "woff",
-              "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
             }
           ]
-        },
-        "600:normal": {
+        }
+      }
+    },
+    "serif": {
+      "family": "Noto Serif",
+      "variable": "--font-serif",
+      "variants": {
+        "700:normal": {
           "files": [
             {
-              "file": "assets/instrument-sans-600-normal-B7fBEWYG.woff2",
+              "file": "assets/noto-serif-700-normal-CIw17UNa.woff2",
               "format": "woff2",
-              "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
-            },
-            {
-              "file": "assets/instrument-sans-600-normal-B9e8oLYv.woff",
-              "format": "woff",
-              "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+              "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
             }
           ]
         }

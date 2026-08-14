@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 trait ProfileValidationRules
 {
     /**
-     * Get the validation rules used to validate user profiles.
+     * Get the validation rules used to validate user profiles on registration.
      *
      * @return array<string, array<int, ValidationRule|array<mixed>|string>>
      */
@@ -18,6 +18,20 @@ trait ProfileValidationRules
         return [
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
+        ];
+    }
+
+    /**
+     * Get the validation rules used to update an authenticated member profile.
+     *
+     * @return array<string, array<int, ValidationRule|array<mixed>|string>>
+     */
+    protected function profileUpdateRules(?int $userId = null): array
+    {
+        return [
+            ...$this->profileRules($userId),
+            'bio' => ['nullable', 'string', 'max:1000'],
+            'avatar' => ['nullable', 'image', 'max:2048'],
         ];
     }
 

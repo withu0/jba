@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Seo;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,8 +43,10 @@ class HandleInertiaRequests extends Middleware
             'availableLocales' => config('localization.supported', ['ja', 'en', 'zh']),
             'auth' => [
                 'user' => $request->user(),
+                'admin' => $request->user('admin'),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'seo' => Seo::forRoute(),
         ];
     }
 }

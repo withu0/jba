@@ -7,9 +7,11 @@ import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileCo
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useInitials } from '@/hooks/use-initials';
 import { edit } from '@/routes/profile';
 import type { Auth } from '@/types';
 /* @chisel-email-verification */
@@ -33,6 +35,12 @@ export default function Profile(
 ) {
     const { auth } = usePage<PageProps>().props;
     const { t } = useTranslation();
+    const getInitials = useInitials();
+    const user = auth.user;
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <>
@@ -51,18 +59,54 @@ export default function Profile(
                     {...ProfileController.update.form()}
                     options={{
                         preserveScroll: true,
+                        forceFormData: true,
                     }}
                     className="space-y-6"
                 >
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
+                                <Label htmlFor="avatar">
+                                    {t('settings.avatar')}
+                                </Label>
+
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="size-16 overflow-hidden rounded-full border border-border">
+                                        <AvatarImage
+                                            src={user.avatar ?? undefined}
+                                            alt={user.name}
+                                        />
+                                        <AvatarFallback className="bg-surface text-ink">
+                                            {getInitials(user.name)}
+                                        </AvatarFallback>
+                                    </Avatar>
+
+                                    <Input
+                                        id="avatar"
+                                        type="file"
+                                        name="avatar"
+                                        accept="image/*"
+                                        className="mt-1 block w-full max-w-sm"
+                                    />
+                                </div>
+
+                                <p className="text-xs text-muted-foreground">
+                                    {t('settings.avatarHint')}
+                                </p>
+
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.avatar}
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
                                 <Label htmlFor="name">{t('auth.name')}</Label>
 
                                 <Input
                                     id="name"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.name}
+                                    defaultValue={user.name}
                                     name="name"
                                     required
                                     autoComplete="name"
@@ -84,7 +128,7 @@ export default function Profile(
                                     id="email"
                                     type="email"
                                     className="mt-1 block w-full"
-                                    defaultValue={auth.user.email}
+                                    defaultValue={user.email}
                                     name="email"
                                     required
                                     autoComplete="username"
@@ -97,9 +141,27 @@ export default function Profile(
                                 />
                             </div>
 
+                            <div className="grid gap-2">
+                                <Label htmlFor="bio">{t('settings.bio')}</Label>
+
+                                <textarea
+                                    id="bio"
+                                    name="bio"
+                                    rows={4}
+                                    defaultValue={user.bio ?? ''}
+                                    placeholder={t('settings.bioPlaceholder')}
+                                    className="mt-1 flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
+                                />
+
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.bio}
+                                />
+                            </div>
+
                             {/* @chisel-email-verification */}
                             {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
+                                user.email_verified_at === null && (
                                     <div>
                                         <p className="-mt-4 text-sm text-muted-foreground">
                                             {t('settings.emailUnverified')}{' '}
@@ -108,7 +170,9 @@ export default function Profile(
                                                 as="button"
                                                 className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                             >
-                                                {t('settings.resendVerification')}
+                                                {t(
+                                                    'settings.resendVerification',
+                                                )}
                                             </Link>
                                         </p>
 

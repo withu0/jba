@@ -2,7 +2,9 @@ export type User = {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
+    bio?: string | null;
+    avatar_path?: string | null;
+    avatar?: string | null;
     email_verified_at: string | null;
     /* @chisel-2fa */
     two_factor_enabled?: boolean;
@@ -12,8 +14,18 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type Admin = {
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+};
+
 export type Auth = {
-    user: User;
+    user: User | null;
+    admin: Admin | null;
 };
 
 /* @chisel-2fa */
