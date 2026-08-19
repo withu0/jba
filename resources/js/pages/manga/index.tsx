@@ -34,7 +34,11 @@ export default function MangaIndex({ categories }: { categories: Category[] }) {
                 image="/images/hero-2.jpg"
                 verticalLabel="読 む"
                 crumbs={[{ label: t('nav.manga') }]}
-            />
+            >
+                <p className="mt-5 text-base font-bold text-white [text-shadow:0_0_12px_rgba(255,255,255,0.85),0_0_28px_rgba(255,255,255,0.45)]">
+                    {t('manga.nextIssue')}
+                </p>
+            </PageHero>
 
             <section className="relative isolate overflow-hidden bg-ink py-20 md:py-28">
                 <div

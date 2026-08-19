@@ -225,6 +225,7 @@ const ja = {
     manga: {
         title: '漫画',
         lead: '美容鍼の世界をページをめくってご覧ください。',
+        nextIssue: '月曜日に次号がアップされます',
         bookLabel: '漫画ブック',
         prevPage: '前へ',
         nextPage: '次へ',

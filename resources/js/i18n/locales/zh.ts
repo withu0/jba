@@ -224,6 +224,7 @@ const zh = {
     manga: {
         title: '漫画',
         lead: '翻页了解美容针灸的世界。',
+        nextIssue: '下一期将于星期一更新',
         bookLabel: '漫画书',
         prevPage: '上一页',
         nextPage: '下一页',

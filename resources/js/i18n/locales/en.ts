@@ -226,6 +226,7 @@ const en = {
     manga: {
         title: 'Manga',
         lead: 'Turn the pages to explore beauty acupuncture.',
+        nextIssue: 'The next issue will be uploaded on Monday',
         bookLabel: 'Manga book',
         prevPage: 'Previous',
         nextPage: 'Next',
