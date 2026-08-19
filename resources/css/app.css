@@ -362,6 +362,10 @@
 }
 
 /* react-pageflip: keep page turns, hide hover scrollbars */
+.manga-flipbook {
+    margin-inline: auto;
+}
+
 .manga-flipbook,
 .manga-flipbook .stf__parent,
 .manga-flipbook .stf__wrapper,

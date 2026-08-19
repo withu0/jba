@@ -78,7 +78,7 @@ export default function MangaShow({
                     )}
                 </header>
 
-                <div className="mt-14 w-full">
+                <div className="mt-14 flex w-full justify-center">
                     {pages.length > 0 ? (
                         <MangaBook pages={pages} />
                     ) : (

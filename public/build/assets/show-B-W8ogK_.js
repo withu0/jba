@@ -1,1 +1,0 @@
-import{a as e,t}from"./jsx-runtime-ZjcWHbKS.js";import{t as n}from"./public-post-show-Bl76HHyw.js";var r=e(),i=t();function a(e){let t=(0,r.c)(3),{post:a,indexUrl:o}=e,s;return t[0]!==o||t[1]!==a?(s=(0,i.jsx)(n,{post:a,indexUrl:o,backKey:`news.backToList`,navKey:`nav.news`}),t[0]=o,t[1]=a,t[2]=s):s=t[2],s}export{a as default};

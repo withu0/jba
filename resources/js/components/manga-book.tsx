@@ -306,7 +306,7 @@ export function MangaBook({ pages, className }: MangaBookProps) {
     return (
         <div
             className={cn(
-                'flex w-full max-w-4xl flex-col items-center gap-6',
+                'mx-auto flex w-full max-w-4xl flex-col items-center gap-6',
                 className,
             )}
             aria-label={t('manga.bookLabel')}
