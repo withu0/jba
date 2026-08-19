@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { VerticalLabel } from '@/components/vertical-label';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { register } from '@/routes';
+import { login } from '@/routes';
 import { index as manga } from '@/routes/manga';
 
 const SLIDE_MS = 6500;
@@ -85,7 +85,7 @@ export function HomeHero() {
                         size="lg"
                         className="shadow-lift rounded-md bg-white px-8 text-brand-blue hover:bg-white/90"
                     >
-                        <Link href={register()}>
+                        <Link href={login()}>
                             {t('home.hero.ctaPrimary')}
                         </Link>
                     </Button>

@@ -12,7 +12,6 @@ import {
     dashboard,
     home,
     login,
-    register,
 } from '@/routes';
 import { index as interviews } from '@/routes/interviews';
 import { index as lessons } from '@/routes/lessons';
@@ -50,7 +49,6 @@ const columns = [
             { key: 'dashboard', href: dashboard.url() },
             { key: 'lessons', href: lessons.url() },
             { key: 'logIn', href: login.url() },
-            { key: 'register', href: register.url() },
         ],
     },
 ] as const;

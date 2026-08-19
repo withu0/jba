@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Reveal } from '@/components/reveal';
 import { SectionHeading } from '@/components/section-heading';
 import { Button } from '@/components/ui/button';
-import { register } from '@/routes';
+import { login } from '@/routes';
 import { index as lessons } from '@/routes/lessons';
 
 export type LessonCategory = {
@@ -38,7 +38,7 @@ export function HomeLessons({ categories }: { categories: LessonCategory[] }) {
                     {categories.map((category, index) => (
                         <Reveal as="li" key={category.id} delay={index * 70}>
                             <Link
-                                href={isMember ? lessons() : register()}
+                                href={isMember ? lessons() : login()}
                                 className="group hover:shadow-soft flex h-full items-center gap-5 rounded-md border border-border bg-background px-6 py-6 transition-all duration-500 hover:-translate-y-1 hover:border-brand-blue/40"
                             >
                                 <span className="text-tracking-label font-serif text-2xl font-bold text-brand-turquoise">
@@ -92,8 +92,8 @@ export function HomeLessons({ categories }: { categories: LessonCategory[] }) {
                                 size="lg"
                                 className="rounded-md px-8"
                             >
-                                <Link href={register()}>
-                                    {t('nav.register')}
+                                <Link href={login()}>
+                                    {t('nav.logIn')}
                                 </Link>
                             </Button>
                         </>

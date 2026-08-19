@@ -22,7 +22,6 @@ import {
     dashboard,
     home,
     login,
-    register,
 } from '@/routes';
 import { index as interviews } from '@/routes/interviews';
 import { index as manga } from '@/routes/manga';
@@ -167,28 +166,14 @@ export function PublicHeader() {
                                         </Link>
                                     </Button>
                                 ) : (
-                                    <>
-                                        <Button
-                                            asChild
-                                            variant="outline"
-                                            className="rounded-md"
+                                    <Button asChild className="rounded-md">
+                                        <Link
+                                            href={login()}
+                                            onClick={close}
                                         >
-                                            <Link
-                                                href={login()}
-                                                onClick={close}
-                                            >
-                                                {t('nav.logIn')}
-                                            </Link>
-                                        </Button>
-                                        <Button asChild className="rounded-md">
-                                            <Link
-                                                href={register()}
-                                                onClick={close}
-                                            >
-                                                {t('nav.register')}
-                                            </Link>
-                                        </Button>
-                                    </>
+                                            {t('nav.logIn')}
+                                        </Link>
+                                    </Button>
                                 )}
                                 <LanguageSwitcher
                                     variant="button"
@@ -245,33 +230,17 @@ export function PublicHeader() {
                             </Link>
                         </Button>
                     ) : (
-                        <>
-                            <Button
-                                asChild
-                                size="sm"
-                                variant="ghost"
-                                className={cn(
-                                    'hidden rounded-md sm:inline-flex',
-                                    overlay &&
-                                        'text-white hover:bg-white/10 hover:text-white',
-                                )}
-                            >
-                                <Link href={login()}>{t('nav.logIn')}</Link>
-                            </Button>
-                            <Button
-                                asChild
-                                size="sm"
-                                className={cn(
-                                    'rounded-md',
-                                    overlay &&
-                                        'bg-white text-brand-blue hover:bg-white/90',
-                                )}
-                            >
-                                <Link href={register()}>
-                                    {t('nav.register')}
-                                </Link>
-                            </Button>
-                        </>
+                        <Button
+                            asChild
+                            size="sm"
+                            className={cn(
+                                'rounded-md',
+                                overlay &&
+                                    'bg-white text-brand-blue hover:bg-white/90',
+                            )}
+                        >
+                            <Link href={login()}>{t('nav.logIn')}</Link>
+                        </Button>
                     )}
                 </div>
             </div>

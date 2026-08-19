@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { SparkleDivider } from '@/components/sparkle-divider';
 import { Button } from '@/components/ui/button';
-import { contraindications, counseling, register } from '@/routes';
+import { contraindications, counseling, login } from '@/routes';
 
 export function CtaBand() {
     const { t } = useTranslation();
@@ -46,7 +46,7 @@ export function CtaBand() {
                         variant="outline"
                         className="rounded-md border-white/60 bg-transparent px-8 text-white hover:bg-white/10 hover:text-white"
                     >
-                        <Link href={register()}>{t('cta.secondary')}</Link>
+                        <Link href={login()}>{t('cta.secondary')}</Link>
                     </Button>
                 </div>
                 <p className="mt-8 text-xs text-white/60">

@@ -8,9 +8,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-/* @chisel-registration */
-import { register } from '@/routes';
-/* @end-chisel-registration */
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -101,15 +98,6 @@ export default function Login({ status, canResetPassword }: Props) {
                                 {t('auth.logIn')}
                             </Button>
                         </div>
-
-                        {/* @chisel-registration */}
-                        <div className="text-center text-sm text-muted-foreground">
-                            {t('auth.dontHaveAccount')}{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                {t('auth.signUp')}
-                            </TextLink>
-                        </div>
-                        {/* @end-chisel-registration */}
                     </>
                 )}
             </Form>
