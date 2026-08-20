@@ -23,7 +23,7 @@ type Props = {
     };
     categories: MangaCategoryOption[];
     locales: string[];
-    locale: string;
+    pageLocale: string;
     pages: MangaPageRow[];
     nextPageSortOrder: number;
 };
@@ -32,7 +32,7 @@ export default function AdminMangaEdit({
     episode,
     categories,
     locales,
-    locale,
+    pageLocale,
     pages,
     nextPageSortOrder,
 }: Props) {
@@ -99,7 +99,7 @@ export default function AdminMangaEdit({
 
                 <AdminMangaPageManager
                     episodeId={episode.id}
-                    locale={locale}
+                    locale={pageLocale}
                     locales={locales}
                     pages={pages}
                     nextSortOrder={nextPageSortOrder}

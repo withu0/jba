@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import BeforeAfterController from '@/actions/App/Http/Controllers/Admin/BeforeAfterController';
+import { AdminSortableList } from '@/components/admin-sortable-list';
 import { Button } from '@/components/ui/button';
 import { dashboard } from '@/routes/admin';
 import {
@@ -45,95 +46,76 @@ export default function AdminBeforeAfterIndex({ pairs }: Props) {
                     </Button>
                 </div>
 
-                <div className="divide-y divide-border border border-border">
-                    {pairs.map((pair, index) => (
-                        <div
-                            key={pair.id}
-                            className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                        >
-                            <div className="flex min-w-0 flex-1 items-start gap-4">
-                                <div className="grid w-28 shrink-0 grid-cols-2 gap-1">
-                                    {pair.before_image_url && (
-                                        <img
-                                            src={pair.before_image_url}
-                                            alt=""
-                                            className="aspect-square object-cover"
-                                        />
-                                    )}
-                                    {pair.after_image_url && (
-                                        <img
-                                            src={pair.after_image_url}
-                                            alt=""
-                                            className="aspect-square object-cover"
-                                        />
-                                    )}
-                                </div>
-                                <div className="min-w-0">
-                                    <div className="text-sm font-medium text-ink">
-                                        {pair.title}
+                {pairs.length > 0 ? (
+                    <AdminSortableList
+                        items={pairs}
+                        header={
+                            <>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.preview')}
+                                </th>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.title')}
+                                </th>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.status')}
+                                </th>
+                                <th className="px-4 py-3 text-right font-medium">
+                                    {t('admin.table.actions')}
+                                </th>
+                            </>
+                        }
+                        onReorder={(ids) =>
+                            router.post(
+                                BeforeAfterController.reorder.url(),
+                                { ids },
+                                { preserveScroll: true },
+                            )
+                        }
+                        renderItem={(pair) => (
+                            <>
+                                <td className="px-4 py-3">
+                                    <div className="grid w-20 grid-cols-2 gap-1">
+                                        {pair.before_image_url && (
+                                            <img
+                                                src={pair.before_image_url}
+                                                alt=""
+                                                className="aspect-square object-cover"
+                                            />
+                                        )}
+                                        {pair.after_image_url && (
+                                            <img
+                                                src={pair.after_image_url}
+                                                alt=""
+                                                className="aspect-square object-cover"
+                                            />
+                                        )}
                                     </div>
-                                    <p className="mt-1 text-xs text-muted-foreground">
-                                        {pair.is_published
-                                            ? t(
-                                                  'admin.beforeAfter.statusPublished',
-                                              )
-                                            : t(
-                                                  'admin.beforeAfter.statusDraft',
-                                              )}
-                                        {' · '}
-                                        {t('admin.beforeAfter.sortOrder')}:{' '}
-                                        {pair.sort_order}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={index === 0}
-                                    onClick={() =>
-                                        router.post(
-                                            BeforeAfterController.moveUp.url(
-                                                pair.id,
-                                            ),
-                                        )
-                                    }
-                                >
-                                    {t('admin.beforeAfter.moveUp')}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={index === pairs.length - 1}
-                                    onClick={() =>
-                                        router.post(
-                                            BeforeAfterController.moveDown.url(
-                                                pair.id,
-                                            ),
-                                        )
-                                    }
-                                >
-                                    {t('admin.beforeAfter.moveDown')}
-                                </Button>
-                                <Link
-                                    href={beforeAfterEdit.url(pair.id)}
-                                    className="px-2 text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
-                                >
-                                    {t('admin.beforeAfter.edit')}
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-
-                    {pairs.length === 0 && (
-                        <p className="px-4 py-8 text-sm text-muted-foreground">
-                            {t('admin.beforeAfter.empty')}
-                        </p>
-                    )}
-                </div>
+                                </td>
+                                <td className="px-4 py-3 font-medium text-ink">
+                                    {pair.title}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {pair.is_published
+                                        ? t('admin.beforeAfter.statusPublished')
+                                        : t('admin.beforeAfter.statusDraft')}
+                                </td>
+                                <td className="px-4 py-3 text-right">
+                                    <Link
+                                        href={beforeAfterEdit.url(pair.id)}
+                                        className="text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
+                                    >
+                                        {t('admin.beforeAfter.edit')}
+                                    </Link>
+                                </td>
+                            </>
+                        )}
+                    />
+                ) : (
+                    <p className="border border-border px-4 py-8 text-sm text-muted-foreground">
+                        {t('admin.beforeAfter.empty')}
+                    </p>
+                )}
             </div>
         </>
     );

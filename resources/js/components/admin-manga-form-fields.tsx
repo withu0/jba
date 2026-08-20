@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { AdminField, AdminFieldGrid } from '@/components/admin-form-layout';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { localeLabels } from '@/lib/locale-labels';
 import { cn } from '@/lib/utils';
@@ -48,6 +50,7 @@ export function AdminMangaFormFields({
     submitLabel,
 }: Props) {
     const { t } = useTranslation();
+    const defaultLocale = locales[0] ?? 'ja';
 
     return (
         <>
@@ -56,74 +59,78 @@ export function AdminMangaFormFields({
                     {t('admin.manga.metaSection')}
                 </h2>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="manga_category_id">
-                        {t('admin.manga.category')}
-                    </Label>
-                    <select
-                        id="manga_category_id"
-                        name="manga_category_id"
-                        defaultValue={categoryId ?? ''}
-                        className={cn(selectClasses, 'max-w-sm')}
-                        required
-                    >
-                        {categories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
-                    <InputError message={errors.manga_category_id} />
-                </div>
+                <AdminFieldGrid>
+                    <AdminField>
+                        <Label htmlFor="manga_category_id">
+                            {t('admin.manga.category')}
+                        </Label>
+                        <select
+                            id="manga_category_id"
+                            name="manga_category_id"
+                            defaultValue={categoryId ?? ''}
+                            className={cn(selectClasses, 'max-w-sm')}
+                            required
+                        >
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                        <InputError message={errors.manga_category_id} />
+                    </AdminField>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="slug">{t('admin.manga.slug')}</Label>
-                    <Input
-                        id="slug"
-                        name="slug"
-                        defaultValue={slug}
-                        required
-                        className="max-w-sm"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                        {t('admin.manga.slugHint')}
-                    </p>
-                    <InputError message={errors.slug} />
-                </div>
+                    <AdminField>
+                        <Label htmlFor="slug">{t('admin.manga.slug')}</Label>
+                        <Input
+                            id="slug"
+                            name="slug"
+                            defaultValue={slug}
+                            required
+                            className="max-w-sm"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            {t('admin.manga.slugHint')}
+                        </p>
+                        <InputError message={errors.slug} />
+                    </AdminField>
+                </AdminFieldGrid>
 
-                <div className="flex items-center gap-3">
-                    <input type="hidden" name="is_published" value="0" />
-                    <input
-                        id="is_published"
-                        type="checkbox"
-                        name="is_published"
-                        value="1"
-                        defaultChecked={isPublished}
-                        className="size-4 rounded border-border"
-                    />
-                    <Label htmlFor="is_published">
-                        {t('admin.manga.published')}
-                    </Label>
-                </div>
+                <AdminFieldGrid>
+                    <div className="flex items-center gap-3 self-start">
+                        <input type="hidden" name="is_published" value="0" />
+                        <input
+                            id="is_published"
+                            type="checkbox"
+                            name="is_published"
+                            value="1"
+                            defaultChecked={isPublished}
+                            className="size-4 rounded border-border"
+                        />
+                        <Label htmlFor="is_published">
+                            {t('admin.manga.published')}
+                        </Label>
+                    </div>
+
+                    <AdminField>
+                        <Label htmlFor="sort_order">
+                            {t('admin.manga.sortOrder')}
+                        </Label>
+                        <Input
+                            id="sort_order"
+                            type="number"
+                            name="sort_order"
+                            min={0}
+                            defaultValue={sortOrder}
+                            className="max-w-xs"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            {t('admin.manga.sortOrderHint')}
+                        </p>
+                        <InputError message={errors.sort_order} />
+                    </AdminField>
+                </AdminFieldGrid>
                 <InputError message={errors.is_published} />
-
-                <div className="grid gap-2">
-                    <Label htmlFor="sort_order">
-                        {t('admin.manga.sortOrder')}
-                    </Label>
-                    <Input
-                        id="sort_order"
-                        type="number"
-                        name="sort_order"
-                        min={0}
-                        defaultValue={sortOrder}
-                        className="max-w-xs"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                        {t('admin.manga.sortOrderHint')}
-                    </p>
-                    <InputError message={errors.sort_order} />
-                </div>
             </section>
 
             <section className="space-y-4 border border-border p-4 md:p-5">
@@ -131,48 +138,58 @@ export function AdminMangaFormFields({
                     {t('admin.manga.contentSection')}
                 </h2>
 
-                {locales.map((locale) => (
-                    <div
-                        key={locale}
-                        className="space-y-4 border border-border p-4"
-                    >
-                        <h3 className="text-sm font-medium text-ink">
-                            {localeLabels[locale] ?? locale}
-                        </h3>
-                        <div className="grid gap-2">
-                            <Label htmlFor={`title-${locale}`}>
-                                {t('admin.manga.fieldTitle')}
-                            </Label>
-                            <Input
-                                id={`title-${locale}`}
-                                name={`translations[${locale}][title]`}
-                                defaultValue={translations[locale]?.title ?? ''}
-                                required
-                            />
-                            <InputError
-                                message={errors[`translations.${locale}.title`]}
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor={`description-${locale}`}>
-                                {t('admin.manga.fieldDescription')}
-                            </Label>
-                            <Textarea
-                                id={`description-${locale}`}
-                                name={`translations[${locale}][description]`}
-                                defaultValue={
-                                    translations[locale]?.description ?? ''
-                                }
-                                rows={3}
-                            />
-                            <InputError
-                                message={
-                                    errors[`translations.${locale}.description`]
-                                }
-                            />
-                        </div>
-                    </div>
-                ))}
+                <Tabs defaultValue={defaultLocale}>
+                    <TabsList>
+                        {locales.map((locale) => (
+                            <TabsTrigger key={locale} value={locale}>
+                                {localeLabels[locale] ?? locale}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+
+                    {locales.map((locale) => (
+                        <TabsContent key={locale} value={locale}>
+                            <AdminField>
+                                <Label htmlFor={`title-${locale}`}>
+                                    {t('admin.manga.fieldTitle')}
+                                </Label>
+                                <Input
+                                    id={`title-${locale}`}
+                                    name={`translations[${locale}][title]`}
+                                    defaultValue={
+                                        translations[locale]?.title ?? ''
+                                    }
+                                    required
+                                />
+                                <InputError
+                                    message={
+                                        errors[`translations.${locale}.title`]
+                                    }
+                                />
+                            </AdminField>
+                            <AdminField>
+                                <Label htmlFor={`description-${locale}`}>
+                                    {t('admin.manga.fieldDescription')}
+                                </Label>
+                                <Textarea
+                                    id={`description-${locale}`}
+                                    name={`translations[${locale}][description]`}
+                                    defaultValue={
+                                        translations[locale]?.description ?? ''
+                                    }
+                                    rows={3}
+                                />
+                                <InputError
+                                    message={
+                                        errors[
+                                            `translations.${locale}.description`
+                                        ]
+                                    }
+                                />
+                            </AdminField>
+                        </TabsContent>
+                    ))}
+                </Tabs>
             </section>
 
             <Button type="submit" disabled={processing}>

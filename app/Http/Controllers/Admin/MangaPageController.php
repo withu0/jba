@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Concerns\ReordersSortableRecords;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreMangaPageRequest;
 use App\Models\MangaEpisode;
 use App\Models\MangaPage;
@@ -41,7 +42,7 @@ class MangaPageController extends Controller
 
         return to_route('admin.manga.edit', [
             'episode' => $episode,
-            'locale' => $locale,
+            'page_locale' => $locale,
         ]);
     }
 
@@ -60,7 +61,7 @@ class MangaPageController extends Controller
 
         return to_route('admin.manga.edit', [
             'episode' => $episodeId,
-            'locale' => $locale,
+            'page_locale' => $locale,
         ]);
     }
 
@@ -70,7 +71,7 @@ class MangaPageController extends Controller
 
         return to_route('admin.manga.edit', [
             'episode' => $page->manga_episode_id,
-            'locale' => $page->locale,
+            'page_locale' => $page->locale,
         ]);
     }
 
@@ -80,7 +81,21 @@ class MangaPageController extends Controller
 
         return to_route('admin.manga.edit', [
             'episode' => $page->manga_episode_id,
-            'locale' => $page->locale,
+            'page_locale' => $page->locale,
+        ]);
+    }
+
+    public function reorder(ReorderRecordsRequest $request, MangaPage $page): RedirectResponse
+    {
+        $this->applyOrderedIds(
+            $this->siblingsOf($page),
+            $page,
+            $request->validated('ids'),
+        );
+
+        return to_route('admin.manga.edit', [
+            'episode' => $page->manga_episode_id,
+            'page_locale' => $page->locale,
         ]);
     }
 

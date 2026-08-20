@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Concerns\ReordersSortableRecords;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreBeforeAfterRequest;
 use App\Http\Requests\Admin\UpdateBeforeAfterRequest;
 use App\Models\BeforeAfter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BeforeAfterController extends Controller
 {
+    use ReordersSortableRecords;
+
     public function index(): Response
     {
         $pairs = BeforeAfter::query()
@@ -134,53 +137,27 @@ class BeforeAfterController extends Controller
 
     public function moveUp(BeforeAfter $beforeAfter): RedirectResponse
     {
-        $this->swapWithNeighbor($beforeAfter, 'up');
+        $this->swapWithNeighbor(BeforeAfter::query(), $beforeAfter, 'up');
 
         return back();
     }
 
     public function moveDown(BeforeAfter $beforeAfter): RedirectResponse
     {
-        $this->swapWithNeighbor($beforeAfter, 'down');
+        $this->swapWithNeighbor(BeforeAfter::query(), $beforeAfter, 'down');
 
         return back();
     }
 
-    /**
-     * @param  'up'|'down'  $direction
-     */
-    private function swapWithNeighbor(BeforeAfter $pair, string $direction): void
+    public function reorder(ReorderRecordsRequest $request): RedirectResponse
     {
-        $orderedIds = BeforeAfter::query()
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->pluck('id')
-            ->all();
+        $this->applyOrderedIds(
+            BeforeAfter::query(),
+            new BeforeAfter,
+            $request->validated('ids'),
+        );
 
-        $index = array_search($pair->id, $orderedIds, true);
-
-        if ($index === false) {
-            return;
-        }
-
-        $neighborIndex = $direction === 'up' ? $index - 1 : $index + 1;
-
-        if (! array_key_exists($neighborIndex, $orderedIds)) {
-            return;
-        }
-
-        [$orderedIds[$index], $orderedIds[$neighborIndex]] = [
-            $orderedIds[$neighborIndex],
-            $orderedIds[$index],
-        ];
-
-        DB::transaction(function () use ($orderedIds): void {
-            foreach ($orderedIds as $position => $id) {
-                BeforeAfter::query()
-                    ->whereKey($id)
-                    ->update(['sort_order' => $position + 1]);
-            }
-        });
+        return back();
     }
 
     private function storeImage(UploadedFile $file): string

@@ -1,6 +1,8 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import MangaEpisodeController from '@/actions/App/Http/Controllers/Admin/MangaEpisodeController';
+import { AdminSortableList } from '@/components/admin-sortable-list';
 import { Button } from '@/components/ui/button';
 import { dashboard } from '@/routes/admin';
 import {
@@ -40,15 +42,21 @@ export default function AdminMangaIndex({
 }: Props) {
     const { t } = useTranslation();
 
-    const isFirstInCategory = (index: number) =>
-        index === 0 ||
-        episodes[index - 1].manga_category_id !==
-            episodes[index].manga_category_id;
+    const groups = useMemo(() => {
+        const map = new Map<number, EpisodeRow[]>();
 
-    const isLastInCategory = (index: number) =>
-        index === episodes.length - 1 ||
-        episodes[index + 1].manga_category_id !==
-            episodes[index].manga_category_id;
+        for (const episode of episodes) {
+            const list = map.get(episode.manga_category_id) ?? [];
+            list.push(episode);
+            map.set(episode.manga_category_id, list);
+        }
+
+        return Array.from(map.entries()).map(([id, items]) => ({
+            id,
+            name: items[0]?.category_name ?? '',
+            items,
+        }));
+    }, [episodes]);
 
     return (
         <>
@@ -118,81 +126,97 @@ export default function AdminMangaIndex({
                     ))}
                 </div>
 
-                <div className="divide-y divide-border border border-border">
-                    {episodes.map((episode, index) => (
-                        <div
-                            key={episode.id}
-                            className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                        >
-                            <div className="min-w-0">
-                                <div className="text-sm font-medium text-ink">
-                                    {episode.title}
-                                </div>
-                                <p className="mt-1 text-xs text-muted-foreground">
-                                    {episode.category_name}
-                                    {' · '}
-                                    {episode.slug}
-                                    {' · '}
-                                    {episode.is_published
-                                        ? t('admin.manga.statusPublished')
-                                        : t('admin.manga.statusDraft')}
-                                    {' · '}
-                                    {t('admin.manga.sortOrder')}:{' '}
-                                    {episode.sort_order}
-                                    {' · '}
-                                    {t('admin.manga.pagesCount', {
-                                        count: episode.pages_count,
-                                    })}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={isFirstInCategory(index)}
-                                    onClick={() =>
+                {groups.length > 0 ? (
+                    <div className="space-y-8">
+                        {groups.map((group) => (
+                            <div key={group.id} className="space-y-3">
+                                {categoryId === null && (
+                                    <h2 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        {group.name}
+                                    </h2>
+                                )}
+                                <AdminSortableList
+                                    items={group.items}
+                                    colgroup={
+                                        <>
+                                            <col />
+                                            <col className="w-40" />
+                                            <col className="w-28" />
+                                            <col className="w-32" />
+                                            <col className="w-24" />
+                                        </>
+                                    }
+                                    header={
+                                        <>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.title')}
+                                            </th>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.slug')}
+                                            </th>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.status')}
+                                            </th>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.pages')}
+                                            </th>
+                                            <th className="px-4 py-3 text-right font-medium">
+                                                {t('admin.table.actions')}
+                                            </th>
+                                        </>
+                                    }
+                                    onReorder={(ids) =>
                                         router.post(
-                                            MangaEpisodeController.moveUp.url(
-                                                episode.id,
+                                            MangaEpisodeController.reorder.url(
+                                                group.items[0].id,
                                             ),
+                                            { ids },
+                                            { preserveScroll: true },
                                         )
                                     }
-                                >
-                                    {t('admin.manga.moveUp')}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={isLastInCategory(index)}
-                                    onClick={() =>
-                                        router.post(
-                                            MangaEpisodeController.moveDown.url(
-                                                episode.id,
-                                            ),
-                                        )
-                                    }
-                                >
-                                    {t('admin.manga.moveDown')}
-                                </Button>
-                                <Link
-                                    href={episodeEdit.url(episode.id)}
-                                    className="px-2 text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
-                                >
-                                    {t('admin.manga.edit')}
-                                </Link>
+                                    renderItem={(episode) => (
+                                        <>
+                                            <td className="truncate px-4 py-3 font-medium text-ink">
+                                                {episode.title}
+                                            </td>
+                                            <td className="px-4 py-3 text-muted-foreground">
+                                                {episode.slug}
+                                            </td>
+                                            <td className="px-4 py-3 text-muted-foreground">
+                                                {episode.is_published
+                                                    ? t(
+                                                          'admin.manga.statusPublished',
+                                                      )
+                                                    : t(
+                                                          'admin.manga.statusDraft',
+                                                      )}
+                                            </td>
+                                            <td className="px-4 py-3 text-muted-foreground">
+                                                {t('admin.manga.pagesCount', {
+                                                    count: episode.pages_count,
+                                                })}
+                                            </td>
+                                            <td className="px-4 py-3 text-right">
+                                                <Link
+                                                    href={episodeEdit.url(
+                                                        episode.id,
+                                                    )}
+                                                    className="text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
+                                                >
+                                                    {t('admin.manga.edit')}
+                                                </Link>
+                                            </td>
+                                        </>
+                                    )}
+                                />
                             </div>
-                        </div>
-                    ))}
-
-                    {episodes.length === 0 && (
-                        <p className="px-4 py-8 text-sm text-muted-foreground">
-                            {t('admin.manga.empty')}
-                        </p>
-                    )}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="border border-border px-4 py-8 text-sm text-muted-foreground">
+                        {t('admin.manga.empty')}
+                    </p>
+                )}
             </div>
         </>
     );

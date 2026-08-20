@@ -1,12 +1,15 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import PageContentController from '@/actions/App/Http/Controllers/Admin/PageContentController';
+import { AdminField } from '@/components/admin-form-layout';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { localeLabels } from '@/lib/locale-labels';
 import { dashboard } from '@/routes/admin';
 import { index as pagesIndex } from '@/routes/admin/pages';
 
@@ -24,14 +27,9 @@ type Props = {
     locales: string[];
 };
 
-const localeLabels: Record<string, string> = {
-    ja: '日本語',
-    en: 'English',
-    zh: '中文',
-};
-
 export default function AdminPagesEdit({ page, locales }: Props) {
     const { t } = useTranslation();
+    const defaultLocale = locales[0] ?? 'ja';
 
     return (
         <>
@@ -61,57 +59,92 @@ export default function AdminPagesEdit({ page, locales }: Props) {
                 >
                     {({ processing, errors }) => (
                         <>
-                            {locales.map((locale) => {
-                                const fields = page.translations[locale] ?? {
-                                    title: '',
-                                    body: '',
-                                };
-                                const titleError =
-                                    errors[`translations.${locale}.title`];
-                                const bodyError =
-                                    errors[`translations.${locale}.body`];
+                            <section className="space-y-4 border border-border p-4 md:p-5">
+                                <Tabs defaultValue={defaultLocale}>
+                                    <TabsList>
+                                        {locales.map((locale) => (
+                                            <TabsTrigger
+                                                key={locale}
+                                                value={locale}
+                                            >
+                                                {localeLabels[locale] ?? locale}
+                                            </TabsTrigger>
+                                        ))}
+                                    </TabsList>
 
-                                return (
-                                    <section
-                                        key={locale}
-                                        className="space-y-4 border border-border p-4 md:p-5"
-                                    >
-                                        <h2 className="text-sm font-semibold tracking-wide text-ink uppercase">
-                                            {localeLabels[locale] ?? locale}
-                                        </h2>
+                                    {locales.map((locale) => {
+                                        const fields = page.translations[
+                                            locale
+                                        ] ?? {
+                                            title: '',
+                                            body: '',
+                                        };
+                                        const titleError =
+                                            errors[
+                                                `translations.${locale}.title`
+                                            ];
+                                        const bodyError =
+                                            errors[
+                                                `translations.${locale}.body`
+                                            ];
 
-                                        <div className="grid gap-2">
-                                            <Label htmlFor={`title-${locale}`}>
-                                                {t('admin.pages.fieldTitle')}
-                                            </Label>
-                                            <Input
-                                                id={`title-${locale}`}
-                                                name={`translations[${locale}][title]`}
-                                                defaultValue={fields.title}
-                                                required
-                                            />
-                                            <InputError message={titleError} />
-                                        </div>
+                                        return (
+                                            <TabsContent
+                                                key={locale}
+                                                value={locale}
+                                            >
+                                                <AdminField>
+                                                    <Label
+                                                        htmlFor={`title-${locale}`}
+                                                    >
+                                                        {t(
+                                                            'admin.pages.fieldTitle',
+                                                        )}
+                                                    </Label>
+                                                    <Input
+                                                        id={`title-${locale}`}
+                                                        name={`translations[${locale}][title]`}
+                                                        defaultValue={
+                                                            fields.title
+                                                        }
+                                                        required
+                                                    />
+                                                    <InputError
+                                                        message={titleError}
+                                                    />
+                                                </AdminField>
 
-                                        <div className="grid gap-2">
-                                            <Label htmlFor={`body-${locale}`}>
-                                                {t('admin.pages.fieldBody')}
-                                            </Label>
-                                            <Textarea
-                                                id={`body-${locale}`}
-                                                name={`translations[${locale}][body]`}
-                                                defaultValue={fields.body}
-                                                rows={10}
-                                                className="min-h-40"
-                                            />
-                                            <p className="text-xs text-muted-foreground">
-                                                {t('admin.pages.bodyHint')}
-                                            </p>
-                                            <InputError message={bodyError} />
-                                        </div>
-                                    </section>
-                                );
-                            })}
+                                                <AdminField>
+                                                    <Label
+                                                        htmlFor={`body-${locale}`}
+                                                    >
+                                                        {t(
+                                                            'admin.pages.fieldBody',
+                                                        )}
+                                                    </Label>
+                                                    <Textarea
+                                                        id={`body-${locale}`}
+                                                        name={`translations[${locale}][body]`}
+                                                        defaultValue={
+                                                            fields.body
+                                                        }
+                                                        rows={10}
+                                                        className="min-h-40"
+                                                    />
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {t(
+                                                            'admin.pages.bodyHint',
+                                                        )}
+                                                    </p>
+                                                    <InputError
+                                                        message={bodyError}
+                                                    />
+                                                </AdminField>
+                                            </TabsContent>
+                                        );
+                                    })}
+                                </Tabs>
+                            </section>
 
                             <div className="flex items-center gap-3">
                                 <Button

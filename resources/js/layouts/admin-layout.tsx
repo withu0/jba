@@ -13,7 +13,7 @@ export default function AdminLayout({
             <AdminSidebar />
             <AppContent variant="sidebar" className="overflow-x-hidden">
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
-                {children}
+                <div className="mx-auto w-full max-w-5xl">{children}</div>
             </AppContent>
         </AppShell>
     );

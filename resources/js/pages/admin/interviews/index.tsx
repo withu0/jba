@@ -46,36 +46,55 @@ export default function AdminInterviewsIndex({ posts }: Props) {
                     </Button>
                 </div>
 
-                <div className="divide-y divide-border border border-border">
-                    {posts.data.map((post) => (
-                        <div
-                            key={post.id}
-                            className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                        >
-                            <div>
-                                <div className="text-sm font-medium text-ink">
-                                    {post.title}
-                                </div>
-                                <p className="mt-1 text-xs text-muted-foreground">
-                                    {post.is_published
-                                        ? t('admin.posts.statusPublished')
-                                        : t('admin.posts.statusDraft')}
-                                </p>
-                            </div>
-                            <Link
-                                href={interviewsEdit.url(post.id)}
-                                className="text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
-                            >
-                                {t('admin.posts.edit')}
-                            </Link>
-                        </div>
-                    ))}
+                <div className="overflow-x-auto border border-border">
+                    <table className="min-w-160 w-full text-left text-sm">
+                        <thead className="border-b border-border bg-surface text-xs tracking-wide text-muted-foreground uppercase">
+                            <tr>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.title')}
+                                </th>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.status')}
+                                </th>
+                                <th className="px-4 py-3 text-right font-medium">
+                                    {t('admin.table.actions')}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                            {posts.data.map((post) => (
+                                <tr key={post.id} className="bg-background">
+                                    <td className="px-4 py-3 font-medium text-ink">
+                                        {post.title}
+                                    </td>
+                                    <td className="px-4 py-3 text-muted-foreground">
+                                        {post.is_published
+                                            ? t('admin.posts.statusPublished')
+                                            : t('admin.posts.statusDraft')}
+                                    </td>
+                                    <td className="px-4 py-3 text-right">
+                                        <Link
+                                            href={interviewsEdit.url(post.id)}
+                                            className="text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
+                                        >
+                                            {t('admin.posts.edit')}
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
 
-                    {posts.data.length === 0 && (
-                        <p className="px-4 py-8 text-sm text-muted-foreground">
-                            {t('admin.interviews.empty')}
-                        </p>
-                    )}
+                            {posts.data.length === 0 && (
+                                <tr>
+                                    <td
+                                        colSpan={3}
+                                        className="px-4 py-8 text-center text-sm text-muted-foreground"
+                                    >
+                                        {t('admin.interviews.empty')}
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>

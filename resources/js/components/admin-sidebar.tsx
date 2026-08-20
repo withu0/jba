@@ -10,6 +10,7 @@ import {
     LogOut,
     MessagesSquare,
     Newspaper,
+    Users,
     Video,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +34,7 @@ import { index as adminLessonCategories } from '@/routes/admin/lesson-categories
 import { index as adminLessons } from '@/routes/admin/lessons';
 import { index as adminManga } from '@/routes/admin/manga';
 import { index as adminMangaCategories } from '@/routes/admin/manga-categories';
+import { index as adminMembers } from '@/routes/admin/members';
 import { index as adminNews } from '@/routes/admin/news';
 import { index as adminPages } from '@/routes/admin/pages';
 import type { NavItem } from '@/types';
@@ -46,6 +48,11 @@ export function AdminSidebar() {
             title: t('admin.nav.dashboard'),
             href: dashboard(),
             icon: LayoutGrid,
+        },
+        {
+            title: t('admin.nav.members'),
+            href: adminMembers(),
+            icon: Users,
         },
         {
             title: t('admin.nav.lessons'),

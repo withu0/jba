@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Concerns\ReordersSortableRecords;
 use App\Concerns\ResolvesContentLocales;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreMangaCategoryRequest;
 use App\Http\Requests\Admin\UpdateMangaCategoryRequest;
 use App\Models\MangaCategory;
@@ -128,6 +129,17 @@ class MangaCategoryController extends Controller
     public function moveDown(MangaCategory $category): RedirectResponse
     {
         $this->swapWithNeighbor(MangaCategory::query(), $category, 'down');
+
+        return back();
+    }
+
+    public function reorder(ReorderRecordsRequest $request): RedirectResponse
+    {
+        $this->applyOrderedIds(
+            MangaCategory::query(),
+            new MangaCategory,
+            $request->validated('ids'),
+        );
 
         return back();
     }

@@ -139,7 +139,7 @@ class MangaAdminTest extends TestCase
                 'locale' => 'en',
                 'image' => UploadedFile::fake()->image('cover.jpg'),
             ])
-            ->assertRedirect(route('admin.manga.edit', ['episode' => $episode, 'locale' => 'en']));
+            ->assertRedirect(route('admin.manga.edit', ['episode' => $episode, 'page_locale' => 'en']));
 
         $this->actingAs($admin, 'admin')
             ->post(route('admin.manga.pages.store', $episode), [
@@ -158,14 +158,14 @@ class MangaAdminTest extends TestCase
 
         $this->actingAs($admin, 'admin')
             ->post(route('admin.manga-pages.move-down', $first))
-            ->assertRedirect(route('admin.manga.edit', ['episode' => $episode, 'locale' => 'en']));
+            ->assertRedirect(route('admin.manga.edit', ['episode' => $episode, 'page_locale' => 'en']));
 
         $this->assertSame(1, $second->fresh()?->sort_order);
         $this->assertSame(2, $first->fresh()?->sort_order);
 
         $this->actingAs($admin, 'admin')
             ->delete(route('admin.manga-pages.destroy', $first))
-            ->assertRedirect(route('admin.manga.edit', ['episode' => $episode, 'locale' => 'en']));
+            ->assertRedirect(route('admin.manga.edit', ['episode' => $episode, 'page_locale' => 'en']));
 
         $this->assertDatabaseMissing('manga_pages', ['id' => $first->id]);
         Storage::disk('public')->assertMissing($first->image_path);

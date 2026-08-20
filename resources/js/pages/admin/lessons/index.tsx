@@ -1,6 +1,8 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import LessonController from '@/actions/App/Http/Controllers/Admin/LessonController';
+import { AdminSortableList } from '@/components/admin-sortable-list';
 import { Button } from '@/components/ui/button';
 import { dashboard } from '@/routes/admin';
 import { index as lessonCategoriesIndex } from '@/routes/admin/lesson-categories';
@@ -40,17 +42,21 @@ export default function AdminLessonsIndex({
 }: Props) {
     const { t } = useTranslation();
 
-    // Move buttons reorder within a category, so the neighbours that matter are
-    // the rows sharing this row's category rather than the whole list.
-    const isFirstInCategory = (index: number) =>
-        index === 0 ||
-        lessons[index - 1].lesson_category_id !==
-            lessons[index].lesson_category_id;
+    const groups = useMemo(() => {
+        const map = new Map<number, LessonRow[]>();
 
-    const isLastInCategory = (index: number) =>
-        index === lessons.length - 1 ||
-        lessons[index + 1].lesson_category_id !==
-            lessons[index].lesson_category_id;
+        for (const lesson of lessons) {
+            const list = map.get(lesson.lesson_category_id) ?? [];
+            list.push(lesson);
+            map.set(lesson.lesson_category_id, list);
+        }
+
+        return Array.from(map.entries()).map(([id, items]) => ({
+            id,
+            name: items[0]?.category_name ?? '',
+            items,
+        }));
+    }, [lessons]);
 
     return (
         <>
@@ -120,83 +126,99 @@ export default function AdminLessonsIndex({
                     ))}
                 </div>
 
-                <div className="divide-y divide-border border border-border">
-                    {lessons.map((lesson, index) => (
-                        <div
-                            key={lesson.id}
-                            className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                        >
-                            <div className="min-w-0">
-                                <div className="text-sm font-medium text-ink">
-                                    {lesson.title}
-                                </div>
-                                <p className="mt-1 text-xs text-muted-foreground">
-                                    {lesson.category_name}
-                                    {' · '}
-                                    {lesson.is_published
-                                        ? t('admin.lessons.statusPublished')
-                                        : t('admin.lessons.statusDraft')}
-                                    {' · '}
-                                    {t('admin.lessons.sortOrder')}:{' '}
-                                    {lesson.sort_order}
-                                    {' · '}
-                                    {t('admin.lessons.imagesCount', {
-                                        count: lesson.images_count,
-                                    })}
-                                    {' · '}
-                                    {lesson.has_video
-                                        ? t('admin.lessons.hasVideo')
-                                        : t('admin.lessons.noVideo')}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={isFirstInCategory(index)}
-                                    onClick={() =>
+                {groups.length > 0 ? (
+                    <div className="space-y-8">
+                        {groups.map((group) => (
+                            <div key={group.id} className="space-y-3">
+                                {categoryId === null && (
+                                    <h2 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                        {group.name}
+                                    </h2>
+                                )}
+                                <AdminSortableList
+                                    items={group.items}
+                                    colgroup={
+                                        <>
+                                            <col />
+                                            <col className="w-28" />
+                                            <col className="w-32" />
+                                            <col className="w-40" />
+                                            <col className="w-24" />
+                                        </>
+                                    }
+                                    header={
+                                        <>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.title')}
+                                            </th>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.status')}
+                                            </th>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.video')}
+                                            </th>
+                                            <th className="px-4 py-3 font-medium">
+                                                {t('admin.table.images')}
+                                            </th>
+                                            <th className="px-4 py-3 text-right font-medium">
+                                                {t('admin.table.actions')}
+                                            </th>
+                                        </>
+                                    }
+                                    onReorder={(ids) =>
                                         router.post(
-                                            LessonController.moveUp.url(
-                                                lesson.id,
+                                            LessonController.reorder.url(
+                                                group.items[0].id,
                                             ),
+                                            { ids },
+                                            { preserveScroll: true },
                                         )
                                     }
-                                >
-                                    {t('admin.lessons.moveUp')}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={isLastInCategory(index)}
-                                    onClick={() =>
-                                        router.post(
-                                            LessonController.moveDown.url(
-                                                lesson.id,
-                                            ),
-                                        )
-                                    }
-                                >
-                                    {t('admin.lessons.moveDown')}
-                                </Button>
-                                <Link
-                                    href={lessonEdit.url(lesson.id)}
-                                    className="px-2 text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
-                                >
-                                    {t('admin.lessons.edit')}
-                                </Link>
+                                    renderItem={(lesson) => (
+                                        <>
+                                            <td className="truncate px-4 py-3 font-medium text-ink">
+                                                {lesson.title}
+                                            </td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                                                {lesson.is_published
+                                                    ? t(
+                                                          'admin.lessons.statusPublished',
+                                                      )
+                                                    : t(
+                                                          'admin.lessons.statusDraft',
+                                                      )}
+                                            </td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                                                {lesson.has_video
+                                                    ? t('admin.lessons.hasVideo')
+                                                    : t('admin.lessons.noVideo')}
+                                            </td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                                                {t('admin.lessons.imagesCount', {
+                                                    count: lesson.images_count,
+                                                })}
+                                            </td>
+                                            <td className="px-4 py-3 text-right">
+                                                <Link
+                                                    href={lessonEdit.url(
+                                                        lesson.id,
+                                                    )}
+                                                    className="text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
+                                                >
+                                                    {t('admin.lessons.edit')}
+                                                </Link>
+                                            </td>
+                                        </>
+                                    )}
+                                />
                             </div>
-                        </div>
-                    ))}
-
-                    {lessons.length === 0 && (
-                        <p className="px-4 py-8 text-sm text-muted-foreground">
-                            {t('admin.lessons.empty')}
-                        </p>
-                    )}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="border border-border px-4 py-8 text-sm text-muted-foreground">
+                        {t('admin.lessons.empty')}
+                    </p>
+                )}
             </div>
         </>
     );

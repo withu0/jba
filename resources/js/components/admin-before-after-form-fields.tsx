@@ -1,11 +1,14 @@
+import { useTranslation } from 'react-i18next';
+import { AdminField, AdminFieldGrid } from '@/components/admin-form-layout';
+import { FileDropzone } from '@/components/file-dropzone';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { localeLabels } from '@/lib/locale-labels';
-import { useTranslation } from 'react-i18next';
 
 export type BeforeAfterTranslationFields = {
     title: string;
@@ -38,6 +41,7 @@ export function AdminBeforeAfterFormFields({
     requireImages = false,
 }: Props) {
     const { t } = useTranslation();
+    const defaultLocale = locales[0] ?? 'ja';
 
     return (
         <>
@@ -46,39 +50,41 @@ export function AdminBeforeAfterFormFields({
                     {t('admin.beforeAfter.metaSection')}
                 </h2>
 
-                <div className="flex items-center gap-3">
-                    <input type="hidden" name="is_published" value="0" />
-                    <input
-                        id="is_published"
-                        type="checkbox"
-                        name="is_published"
-                        value="1"
-                        defaultChecked={isPublished}
-                        className="size-4 rounded border-border"
-                    />
-                    <Label htmlFor="is_published">
-                        {t('admin.beforeAfter.published')}
-                    </Label>
-                </div>
-                <InputError message={errors.is_published} />
+                <AdminFieldGrid>
+                    <div className="flex items-center gap-3 self-start">
+                        <input type="hidden" name="is_published" value="0" />
+                        <input
+                            id="is_published"
+                            type="checkbox"
+                            name="is_published"
+                            value="1"
+                            defaultChecked={isPublished}
+                            className="size-4 rounded border-border"
+                        />
+                        <Label htmlFor="is_published">
+                            {t('admin.beforeAfter.published')}
+                        </Label>
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="sort_order">
-                        {t('admin.beforeAfter.sortOrder')}
-                    </Label>
-                    <Input
-                        id="sort_order"
-                        type="number"
-                        name="sort_order"
-                        min={0}
-                        defaultValue={sortOrder}
-                        className="max-w-xs"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                        {t('admin.beforeAfter.sortOrderHint')}
-                    </p>
-                    <InputError message={errors.sort_order} />
-                </div>
+                    <AdminField>
+                        <Label htmlFor="sort_order">
+                            {t('admin.beforeAfter.sortOrder')}
+                        </Label>
+                        <Input
+                            id="sort_order"
+                            type="number"
+                            name="sort_order"
+                            min={0}
+                            defaultValue={sortOrder}
+                            className="max-w-xs"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            {t('admin.beforeAfter.sortOrderHint')}
+                        </p>
+                        <InputError message={errors.sort_order} />
+                    </AdminField>
+                </AdminFieldGrid>
+                <InputError message={errors.is_published} />
             </section>
 
             <section className="space-y-4 border border-border p-4 md:p-5">
@@ -86,102 +92,95 @@ export function AdminBeforeAfterFormFields({
                     {t('admin.beforeAfter.imagesSection')}
                 </h2>
 
-                <div className="grid gap-6 md:grid-cols-2">
-                    <div className="grid gap-2">
+                <AdminFieldGrid>
+                    <AdminField>
                         <Label htmlFor="before_image">
                             {t('admin.beforeAfter.beforeImage')}
                         </Label>
-                        {beforeImageUrl && (
-                            <img
-                                src={beforeImageUrl}
-                                alt=""
-                                className="mb-2 aspect-[4/3] w-full max-w-sm object-cover"
-                            />
-                        )}
-                        <Input
+                        <FileDropzone
                             id="before_image"
-                            type="file"
                             name="before_image"
                             accept="image/*"
                             required={requireImages}
+                            existingUrl={beforeImageUrl}
+                            hint={t('admin.beforeAfter.imageHint')}
                         />
-                        <p className="text-xs text-muted-foreground">
-                            {t('admin.beforeAfter.imageHint')}
-                        </p>
                         <InputError message={errors.before_image} />
-                    </div>
+                    </AdminField>
 
-                    <div className="grid gap-2">
+                    <AdminField>
                         <Label htmlFor="after_image">
                             {t('admin.beforeAfter.afterImage')}
                         </Label>
-                        {afterImageUrl && (
-                            <img
-                                src={afterImageUrl}
-                                alt=""
-                                className="mb-2 aspect-[4/3] w-full max-w-sm object-cover"
-                            />
-                        )}
-                        <Input
+                        <FileDropzone
                             id="after_image"
-                            type="file"
                             name="after_image"
                             accept="image/*"
                             required={requireImages}
+                            existingUrl={afterImageUrl}
+                            hint={t('admin.beforeAfter.imageHint')}
                         />
-                        <p className="text-xs text-muted-foreground">
-                            {t('admin.beforeAfter.imageHint')}
-                        </p>
                         <InputError message={errors.after_image} />
-                    </div>
-                </div>
+                    </AdminField>
+                </AdminFieldGrid>
             </section>
 
-            {locales.map((locale) => {
-                const fields = translations[locale] ?? {
-                    title: '',
-                    caption: '',
-                };
-                const titleError = errors[`translations.${locale}.title`];
-                const captionError = errors[`translations.${locale}.caption`];
+            <section className="space-y-4 border border-border p-4 md:p-5">
+                <h2 className="text-sm font-semibold tracking-wide text-ink uppercase">
+                    {t('admin.beforeAfter.contentSection')}
+                </h2>
 
-                return (
-                    <section
-                        key={locale}
-                        className="space-y-4 border border-border p-4 md:p-5"
-                    >
-                        <h2 className="text-sm font-semibold tracking-wide text-ink uppercase">
-                            {localeLabels[locale] ?? locale}
-                        </h2>
+                <Tabs defaultValue={defaultLocale}>
+                    <TabsList>
+                        {locales.map((locale) => (
+                            <TabsTrigger key={locale} value={locale}>
+                                {localeLabels[locale] ?? locale}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor={`title-${locale}`}>
-                                {t('admin.beforeAfter.fieldTitle')}
-                            </Label>
-                            <Input
-                                id={`title-${locale}`}
-                                name={`translations[${locale}][title]`}
-                                defaultValue={fields.title}
-                                required
-                            />
-                            <InputError message={titleError} />
-                        </div>
+                    {locales.map((locale) => {
+                        const fields = translations[locale] ?? {
+                            title: '',
+                            caption: '',
+                        };
+                        const titleError =
+                            errors[`translations.${locale}.title`];
+                        const captionError =
+                            errors[`translations.${locale}.caption`];
 
-                        <div className="grid gap-2">
-                            <Label htmlFor={`caption-${locale}`}>
-                                {t('admin.beforeAfter.fieldCaption')}
-                            </Label>
-                            <Textarea
-                                id={`caption-${locale}`}
-                                name={`translations[${locale}][caption]`}
-                                defaultValue={fields.caption}
-                                rows={3}
-                            />
-                            <InputError message={captionError} />
-                        </div>
-                    </section>
-                );
-            })}
+                        return (
+                            <TabsContent key={locale} value={locale}>
+                                <AdminField>
+                                    <Label htmlFor={`title-${locale}`}>
+                                        {t('admin.beforeAfter.fieldTitle')}
+                                    </Label>
+                                    <Input
+                                        id={`title-${locale}`}
+                                        name={`translations[${locale}][title]`}
+                                        defaultValue={fields.title}
+                                        required
+                                    />
+                                    <InputError message={titleError} />
+                                </AdminField>
+
+                                <AdminField>
+                                    <Label htmlFor={`caption-${locale}`}>
+                                        {t('admin.beforeAfter.fieldCaption')}
+                                    </Label>
+                                    <Textarea
+                                        id={`caption-${locale}`}
+                                        name={`translations[${locale}][caption]`}
+                                        defaultValue={fields.caption}
+                                        rows={3}
+                                    />
+                                    <InputError message={captionError} />
+                                </AdminField>
+                            </TabsContent>
+                        );
+                    })}
+                </Tabs>
+            </section>
 
             <div className="flex items-center gap-3">
                 <Button type="submit" disabled={processing}>

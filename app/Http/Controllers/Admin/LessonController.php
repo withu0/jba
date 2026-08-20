@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Concerns\ReordersSortableRecords;
 use App\Concerns\ResolvesContentLocales;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreLessonRequest;
 use App\Http\Requests\Admin\UpdateLessonRequest;
 use App\Models\Lesson;
@@ -195,6 +196,17 @@ class LessonController extends Controller
     public function moveDown(Lesson $lesson): RedirectResponse
     {
         $this->swapWithNeighbor($this->siblingsOf($lesson), $lesson, 'down');
+
+        return back();
+    }
+
+    public function reorder(ReorderRecordsRequest $request, Lesson $lesson): RedirectResponse
+    {
+        $this->applyOrderedIds(
+            $this->siblingsOf($lesson),
+            $lesson,
+            $request->validated('ids'),
+        );
 
         return back();
     }

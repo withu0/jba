@@ -1,6 +1,7 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import LessonCategoryController from '@/actions/App/Http/Controllers/Admin/LessonCategoryController';
+import { AdminField, AdminFieldGrid } from '@/components/admin-form-layout';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -56,8 +57,8 @@ export default function AdminLessonCategoryEdit({ category, locales }: Props) {
                 >
                     {({ processing, errors }) => (
                         <>
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <div className="grid gap-2">
+                            <AdminFieldGrid>
+                                <AdminField>
                                     <Label htmlFor="slug">
                                         {t('admin.lessonCategories.slug')}
                                     </Label>
@@ -71,8 +72,8 @@ export default function AdminLessonCategoryEdit({ category, locales }: Props) {
                                         {t('admin.lessonCategories.slugHint')}
                                     </p>
                                     <InputError message={errors.slug} />
-                                </div>
-                                <div className="grid gap-2">
+                                </AdminField>
+                                <AdminField>
                                     <Label htmlFor="sort_order">
                                         {t('admin.lessonCategories.sortOrder')}
                                     </Label>
@@ -84,12 +85,12 @@ export default function AdminLessonCategoryEdit({ category, locales }: Props) {
                                         defaultValue={category.sort_order}
                                     />
                                     <InputError message={errors.sort_order} />
-                                </div>
-                            </div>
+                                </AdminField>
+                            </AdminFieldGrid>
 
-                            <div className="grid gap-4 md:grid-cols-3">
+                            <AdminFieldGrid columns={3}>
                                 {locales.map((locale) => (
-                                    <div key={locale} className="grid gap-2">
+                                    <AdminField key={locale}>
                                         <Label htmlFor={`name-${locale}`}>
                                             {t(
                                                 'admin.lessonCategories.fieldName',
@@ -112,9 +113,9 @@ export default function AdminLessonCategoryEdit({ category, locales }: Props) {
                                                 ]
                                             }
                                         />
-                                    </div>
+                                    </AdminField>
                                 ))}
-                            </div>
+                            </AdminFieldGrid>
 
                             <Button type="submit" disabled={processing}>
                                 {processing && <Spinner />}

@@ -5,6 +5,7 @@ namespace App\Concerns;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 trait ReordersSortableRecords
 {
@@ -45,9 +46,45 @@ trait ReordersSortableRecords
             $orderedIds[$index],
         ];
 
-        DB::transaction(function () use ($orderedIds, $record): void {
-            foreach ($orderedIds as $position => $id) {
-                $record->newQuery()
+        $this->applyOrderedIds($scope, $record, $orderedIds);
+    }
+
+    /**
+     * Persist an arbitrary sibling order (e.g. after drag-and-drop).
+     *
+     * @template TModel of Model
+     *
+     * @param  Builder<TModel>  $scope
+     * @param  TModel  $prototype  Any model of the same type (used for query builder).
+     * @param  list<int|string>  $orderedIds
+     */
+    protected function applyOrderedIds(Builder $scope, Model $prototype, array $orderedIds): void
+    {
+        $existingIds = array_map(
+            'intval',
+            (clone $scope)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->pluck('id')
+                ->all()
+        );
+
+        $normalized = array_values(array_map('intval', $orderedIds));
+
+        $sortedExisting = $existingIds;
+        $sortedIncoming = $normalized;
+        sort($sortedExisting);
+        sort($sortedIncoming);
+
+        if ($sortedExisting !== $sortedIncoming) {
+            throw ValidationException::withMessages([
+                'ids' => __('The ordered list does not match the current records.'),
+            ]);
+        }
+
+        DB::transaction(function () use ($normalized, $prototype): void {
+            foreach ($normalized as $position => $id) {
+                $prototype->newQuery()
                     ->whereKey($id)
                     ->update(['sort_order' => $position + 1]);
             }

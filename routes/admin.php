@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\LessonImageController;
 use App\Http\Controllers\Admin\MangaCategoryController;
 use App\Http\Controllers\Admin\MangaEpisodeController;
 use App\Http\Controllers\Admin\MangaPageController;
+use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\PageContentController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,10 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
+    Route::resource('members', MemberController::class)
+        ->parameters(['members' => 'user'])
+        ->except(['show']);
+
     Route::get('pages', [PageContentController::class, 'index'])->name('pages.index');
     Route::get('pages/{page}/edit', [PageContentController::class, 'edit'])->name('pages.edit');
     Route::put('pages/{page}', [PageContentController::class, 'update'])->name('pages.update');
@@ -38,6 +43,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('before-after.move-up');
     Route::post('before-after/{beforeAfter}/move-down', [BeforeAfterController::class, 'moveDown'])
         ->name('before-after.move-down');
+    Route::post('before-after/reorder', [BeforeAfterController::class, 'reorder'])
+        ->name('before-after.reorder');
     Route::resource('before-after', BeforeAfterController::class)
         ->parameters(['before-after' => 'beforeAfter'])
         ->except(['show']);
@@ -46,6 +53,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('lesson-categories.move-up');
     Route::post('lesson-categories/{category}/move-down', [LessonCategoryController::class, 'moveDown'])
         ->name('lesson-categories.move-down');
+    Route::post('lesson-categories/reorder', [LessonCategoryController::class, 'reorder'])
+        ->name('lesson-categories.reorder');
     Route::resource('lesson-categories', LessonCategoryController::class)
         ->parameters(['lesson-categories' => 'category'])
         ->except(['show', 'create']);
@@ -54,6 +63,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('lessons.move-up');
     Route::post('lessons/{lesson}/move-down', [LessonController::class, 'moveDown'])
         ->name('lessons.move-down');
+    Route::post('lessons/{lesson}/reorder', [LessonController::class, 'reorder'])
+        ->name('lessons.reorder');
     Route::post('lessons/{lesson}/images', [LessonImageController::class, 'store'])
         ->name('lessons.images.store');
     Route::resource('lessons', LessonController::class)->except(['show']);
@@ -66,11 +77,15 @@ Route::middleware('auth:admin')->group(function () {
         ->name('lesson-images.move-up');
     Route::post('lesson-images/{image}/move-down', [LessonImageController::class, 'moveDown'])
         ->name('lesson-images.move-down');
+    Route::post('lesson-images/{image}/reorder', [LessonImageController::class, 'reorder'])
+        ->name('lesson-images.reorder');
 
     Route::post('manga-categories/{category}/move-up', [MangaCategoryController::class, 'moveUp'])
         ->name('manga-categories.move-up');
     Route::post('manga-categories/{category}/move-down', [MangaCategoryController::class, 'moveDown'])
         ->name('manga-categories.move-down');
+    Route::post('manga-categories/reorder', [MangaCategoryController::class, 'reorder'])
+        ->name('manga-categories.reorder');
     Route::resource('manga-categories', MangaCategoryController::class)
         ->parameters(['manga-categories' => 'category'])
         ->except(['show', 'create']);
@@ -79,6 +94,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('manga.move-up');
     Route::post('manga/{episode}/move-down', [MangaEpisodeController::class, 'moveDown'])
         ->name('manga.move-down');
+    Route::post('manga/{episode}/reorder', [MangaEpisodeController::class, 'reorder'])
+        ->name('manga.reorder');
     Route::post('manga/{episode}/pages', [MangaPageController::class, 'store'])
         ->name('manga.pages.store');
     Route::resource('manga', MangaEpisodeController::class)
@@ -91,6 +108,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('manga-pages.move-up');
     Route::post('manga-pages/{page}/move-down', [MangaPageController::class, 'moveDown'])
         ->name('manga-pages.move-down');
+    Route::post('manga-pages/{page}/reorder', [MangaPageController::class, 'reorder'])
+        ->name('manga-pages.reorder');
 
     Route::get('contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::get('contacts/{contact}', [ContactController::class, 'show'])->name('contacts.show');

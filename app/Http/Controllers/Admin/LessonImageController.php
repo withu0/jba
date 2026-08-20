@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Concerns\ReordersSortableRecords;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreLessonImageRequest;
 use App\Http\Requests\Admin\UpdateLessonImageRequest;
 use App\Models\Lesson;
@@ -93,6 +94,17 @@ class LessonImageController extends Controller
     public function moveDown(LessonImage $image): RedirectResponse
     {
         $this->swapWithNeighbor($this->siblingsOf($image), $image, 'down');
+
+        return back();
+    }
+
+    public function reorder(ReorderRecordsRequest $request, LessonImage $image): RedirectResponse
+    {
+        $this->applyOrderedIds(
+            $this->siblingsOf($image),
+            $image,
+            $request->validated('ids'),
+        );
 
         return back();
     }

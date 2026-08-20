@@ -1,8 +1,19 @@
 import { Form, Head, Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LessonCategoryController from '@/actions/App/Http/Controllers/Admin/LessonCategoryController';
+import { AdminField, AdminFieldGrid } from '@/components/admin-form-layout';
+import { AdminSortableList } from '@/components/admin-sortable-list';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
@@ -40,6 +51,7 @@ export default function AdminLessonCategoriesIndex({
     nextSortOrder,
 }: Props) {
     const { t } = useTranslation();
+    const [createOpen, setCreateOpen] = useState(false);
 
     const deleteCategory = (id: number) => {
         if (!window.confirm(t('admin.lessonCategories.deleteConfirm'))) {
@@ -62,167 +74,204 @@ export default function AdminLessonCategoriesIndex({
                             {t('admin.lessonCategories.lead')}
                         </p>
                     </div>
-                    <Link
-                        href={lessonsIndex()}
-                        className="text-sm text-brand-blue underline-offset-4 hover:underline"
-                    >
-                        {t('admin.lessonCategories.backToLessons')}
-                    </Link>
+                    <div className="flex items-center gap-4">
+                        <Link
+                            href={lessonsIndex()}
+                            className="text-sm text-brand-blue underline-offset-4 hover:underline"
+                        >
+                            {t('admin.lessonCategories.backToLessons')}
+                        </Link>
+                        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                            <DialogTrigger asChild>
+                                <Button type="button">
+                                    {t('admin.lessonCategories.create')}
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        {t('admin.lessonCategories.create')}
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        {t('admin.lessonCategories.lead')}
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <Form
+                                    {...LessonCategoryController.store.form()}
+                                    options={{ preserveScroll: true }}
+                                    resetOnSuccess
+                                    onSuccess={() => setCreateOpen(false)}
+                                    className="space-y-4"
+                                >
+                                    {({ processing, errors }) => (
+                                        <>
+                                            <AdminFieldGrid>
+                                                <AdminField>
+                                                    <Label htmlFor="slug">
+                                                        {t(
+                                                            'admin.lessonCategories.slug',
+                                                        )}
+                                                    </Label>
+                                                    <Input
+                                                        id="slug"
+                                                        name="slug"
+                                                        required
+                                                    />
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {t(
+                                                            'admin.lessonCategories.slugHint',
+                                                        )}
+                                                    </p>
+                                                    <InputError
+                                                        message={errors.slug}
+                                                    />
+                                                </AdminField>
+                                                <AdminField>
+                                                    <Label htmlFor="sort_order">
+                                                        {t(
+                                                            'admin.lessonCategories.sortOrder',
+                                                        )}
+                                                    </Label>
+                                                    <Input
+                                                        id="sort_order"
+                                                        type="number"
+                                                        name="sort_order"
+                                                        min={0}
+                                                        defaultValue={
+                                                            nextSortOrder
+                                                        }
+                                                    />
+                                                    <InputError
+                                                        message={
+                                                            errors.sort_order
+                                                        }
+                                                    />
+                                                </AdminField>
+                                            </AdminFieldGrid>
+
+                                            <AdminFieldGrid columns={3}>
+                                                {locales.map((locale) => (
+                                                    <AdminField key={locale}>
+                                                        <Label
+                                                            htmlFor={`name-${locale}`}
+                                                        >
+                                                            {t(
+                                                                'admin.lessonCategories.fieldName',
+                                                            )}{' '}
+                                                            (
+                                                            {localeLabels[
+                                                                locale
+                                                            ] ?? locale}
+                                                            )
+                                                        </Label>
+                                                        <Input
+                                                            id={`name-${locale}`}
+                                                            name={`translations[${locale}][name]`}
+                                                            defaultValue={
+                                                                translations[
+                                                                    locale
+                                                                ]?.name ?? ''
+                                                            }
+                                                            required
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                errors[
+                                                                    `translations.${locale}.name`
+                                                                ]
+                                                            }
+                                                        />
+                                                    </AdminField>
+                                                ))}
+                                            </AdminFieldGrid>
+
+                                            <Button
+                                                type="submit"
+                                                disabled={processing}
+                                            >
+                                                {processing && <Spinner />}
+                                                {t(
+                                                    'admin.lessonCategories.create',
+                                                )}
+                                            </Button>
+                                        </>
+                                    )}
+                                </Form>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
                 </div>
 
-                <div className="divide-y divide-border border border-border">
-                    {categories.map((category, index) => (
-                        <div
-                            key={category.id}
-                            className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                        >
-                            <div className="min-w-0">
-                                <div className="text-sm font-medium text-ink">
+                {categories.length > 0 ? (
+                    <AdminSortableList
+                        items={categories}
+                        header={
+                            <>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.name')}
+                                </th>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.slug')}
+                                </th>
+                                <th className="px-4 py-3 font-medium">
+                                    {t('admin.table.count')}
+                                </th>
+                                <th className="px-4 py-3 text-right font-medium">
+                                    {t('admin.table.actions')}
+                                </th>
+                            </>
+                        }
+                        onReorder={(ids) =>
+                            router.post(
+                                LessonCategoryController.reorder.url(),
+                                { ids },
+                                { preserveScroll: true },
+                            )
+                        }
+                        renderItem={(category) => (
+                            <>
+                                <td className="px-4 py-3 font-medium text-ink">
                                     {category.name}
-                                </div>
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
                                     {category.slug}
-                                    {' · '}
-                                    {t(
-                                        'admin.lessonCategories.sortOrder',
-                                    )}: {category.sort_order}
-                                    {' · '}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
                                     {t('admin.lessonCategories.lessonsCount', {
                                         count: category.lessons_count,
                                     })}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-2">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={index === 0}
-                                    onClick={() =>
-                                        router.post(
-                                            LessonCategoryController.moveUp.url(
-                                                category.id,
-                                            ),
-                                        )
-                                    }
-                                >
-                                    {t('admin.lessonCategories.moveUp')}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={index === categories.length - 1}
-                                    onClick={() =>
-                                        router.post(
-                                            LessonCategoryController.moveDown.url(
-                                                category.id,
-                                            ),
-                                        )
-                                    }
-                                >
-                                    {t('admin.lessonCategories.moveDown')}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={category.lessons_count > 0}
-                                    onClick={() => deleteCategory(category.id)}
-                                >
-                                    {t('common.delete')}
-                                </Button>
-                                <Link
-                                    href={categoryEdit.url(category.id)}
-                                    className="px-2 text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
-                                >
-                                    {t('admin.lessonCategories.edit')}
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-
-                    {categories.length === 0 && (
-                        <p className="px-4 py-8 text-sm text-muted-foreground">
-                            {t('admin.lessonCategories.empty')}
-                        </p>
-                    )}
-                </div>
-
-                <Form
-                    {...LessonCategoryController.store.form()}
-                    options={{ preserveScroll: true }}
-                    resetOnSuccess
-                    className="space-y-4 border border-border p-4 md:p-5"
-                >
-                    {({ processing, errors }) => (
-                        <>
-                            <h2 className="text-sm font-semibold tracking-wide text-ink uppercase">
-                                {t('admin.lessonCategories.create')}
-                            </h2>
-
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="slug">
-                                        {t('admin.lessonCategories.slug')}
-                                    </Label>
-                                    <Input id="slug" name="slug" required />
-                                    <p className="text-xs text-muted-foreground">
-                                        {t('admin.lessonCategories.slugHint')}
-                                    </p>
-                                    <InputError message={errors.slug} />
-                                </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="sort_order">
-                                        {t('admin.lessonCategories.sortOrder')}
-                                    </Label>
-                                    <Input
-                                        id="sort_order"
-                                        type="number"
-                                        name="sort_order"
-                                        min={0}
-                                        defaultValue={nextSortOrder}
-                                    />
-                                    <InputError message={errors.sort_order} />
-                                </div>
-                            </div>
-
-                            <div className="grid gap-4 md:grid-cols-3">
-                                {locales.map((locale) => (
-                                    <div key={locale} className="grid gap-2">
-                                        <Label htmlFor={`name-${locale}`}>
-                                            {t(
-                                                'admin.lessonCategories.fieldName',
-                                            )}{' '}
-                                            ({localeLabels[locale] ?? locale})
-                                        </Label>
-                                        <Input
-                                            id={`name-${locale}`}
-                                            name={`translations[${locale}][name]`}
-                                            defaultValue={
-                                                translations[locale]?.name ?? ''
+                                </td>
+                                <td className="px-4 py-3">
+                                    <div className="flex flex-wrap items-center justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            disabled={
+                                                category.lessons_count > 0
                                             }
-                                            required
-                                        />
-                                        <InputError
-                                            message={
-                                                errors[
-                                                    `translations.${locale}.name`
-                                                ]
+                                            onClick={() =>
+                                                deleteCategory(category.id)
                                             }
-                                        />
+                                        >
+                                            {t('common.delete')}
+                                        </Button>
+                                        <Link
+                                            href={categoryEdit.url(category.id)}
+                                            className="px-2 text-sm font-medium text-brand-blue underline-offset-4 hover:underline"
+                                        >
+                                            {t('admin.lessonCategories.edit')}
+                                        </Link>
                                     </div>
-                                ))}
-                            </div>
-
-                            <Button type="submit" disabled={processing}>
-                                {processing && <Spinner />}
-                                {t('admin.lessonCategories.create')}
-                            </Button>
-                        </>
-                    )}
-                </Form>
+                                </td>
+                            </>
+                        )}
+                    />
+                ) : (
+                    <p className="border border-border px-4 py-8 text-sm text-muted-foreground">
+                        {t('admin.lessonCategories.empty')}
+                    </p>
+                )}
             </div>
         </>
     );

@@ -1,6 +1,9 @@
 import { Form, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import MangaPageController from '@/actions/App/Http/Controllers/Admin/MangaPageController';
+import { AdminField, AdminFieldGrid } from '@/components/admin-form-layout';
+import { AdminSortableList } from '@/components/admin-sortable-list';
+import { FileDropzone } from '@/components/file-dropzone';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,7 +67,7 @@ export function AdminMangaPageManager({
                     >
                         <Link
                             href={episodeEdit.url(episodeId, {
-                                query: { locale: item },
+                                query: { page_locale: item },
                             })}
                         >
                             {t(`admin.manga.locales.${item}`)}
@@ -91,24 +94,21 @@ export function AdminMangaPageManager({
                                 })}
                             </p>
                         </div>
-                        <div className="grid gap-4 sm:grid-cols-2">
-                            <div className="space-y-2">
+                        <AdminFieldGrid>
+                            <AdminField>
                                 <Label htmlFor="image">
                                     {t('admin.manga.image')}
                                 </Label>
-                                <Input
+                                <FileDropzone
                                     id="image"
                                     name="image"
-                                    type="file"
                                     accept="image/*"
                                     required
+                                    hint={t('admin.manga.imageHint')}
                                 />
-                                <p className="text-xs text-muted-foreground">
-                                    {t('admin.manga.imageHint')}
-                                </p>
                                 <InputError message={errors.image} />
-                            </div>
-                            <div className="space-y-2">
+                            </AdminField>
+                            <AdminField>
                                 <Label htmlFor="sort_order">
                                     {t('admin.manga.pageSortOrder')}
                                 </Label>
@@ -124,8 +124,8 @@ export function AdminMangaPageManager({
                                     {t('admin.manga.pageSortOrderHint')}
                                 </p>
                                 <InputError message={errors.sort_order} />
-                            </div>
-                        </div>
+                            </AdminField>
+                        </AdminFieldGrid>
                         <Button type="submit" disabled={processing}>
                             {t('admin.manga.upload')}
                         </Button>
@@ -133,62 +133,34 @@ export function AdminMangaPageManager({
                 )}
             </Form>
 
-            <div className="divide-y divide-border border border-border">
-                {pages.map((page, index) => (
-                    <div
-                        key={page.id}
-                        className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
-                    >
-                        <div className="flex min-w-0 flex-1 items-center gap-4">
-                            {page.image_url && (
-                                <img
-                                    src={page.image_url}
-                                    alt=""
-                                    className="h-20 w-16 shrink-0 object-cover"
-                                />
-                            )}
-                            <div className="min-w-0">
-                                <div className="text-sm font-medium text-ink">
-                                    {t('admin.manga.pageLabel', {
-                                        n: index + 1,
-                                    })}
+            {pages.length > 0 ? (
+                <AdminSortableList
+                    items={pages}
+                    onReorder={(ids) =>
+                        router.post(
+                            MangaPageController.reorder.url(pages[0].id),
+                            { ids },
+                            { preserveScroll: true },
+                        )
+                    }
+                    renderItem={(page, index) => (
+                        <div className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex min-w-0 flex-1 items-center gap-4">
+                                {page.image_url && (
+                                    <img
+                                        src={page.image_url}
+                                        alt=""
+                                        className="h-20 w-16 shrink-0 object-cover"
+                                    />
+                                )}
+                                <div className="min-w-0">
+                                    <div className="text-sm font-medium text-ink">
+                                        {t('admin.manga.pageLabel', {
+                                            n: index + 1,
+                                        })}
+                                    </div>
                                 </div>
-                                <p className="mt-1 text-xs text-muted-foreground">
-                                    {t('admin.manga.pageSortOrder')}:{' '}
-                                    {page.sort_order}
-                                </p>
                             </div>
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-2">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                disabled={index === 0}
-                                onClick={() =>
-                                    router.post(
-                                        MangaPageController.moveUp.url(page.id),
-                                    )
-                                }
-                            >
-                                {t('admin.manga.moveUp')}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                disabled={index === pages.length - 1}
-                                onClick={() =>
-                                    router.post(
-                                        MangaPageController.moveDown.url(
-                                            page.id,
-                                        ),
-                                    )
-                                }
-                            >
-                                {t('admin.manga.moveDown')}
-                            </Button>
                             <Button
                                 type="button"
                                 variant="outline"
@@ -198,15 +170,13 @@ export function AdminMangaPageManager({
                                 {t('admin.manga.delete')}
                             </Button>
                         </div>
-                    </div>
-                ))}
-
-                {pages.length === 0 && (
-                    <p className="px-4 py-8 text-sm text-muted-foreground">
-                        {t('admin.manga.emptyPages')}
-                    </p>
-                )}
-            </div>
+                    )}
+                />
+            ) : (
+                <p className="border border-border px-4 py-8 text-sm text-muted-foreground">
+                    {t('admin.manga.emptyPages')}
+                </p>
+            )}
         </section>
     );
 }

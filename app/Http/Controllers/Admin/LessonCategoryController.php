@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Concerns\ReordersSortableRecords;
 use App\Concerns\ResolvesContentLocales;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreLessonCategoryRequest;
 use App\Http\Requests\Admin\UpdateLessonCategoryRequest;
 use App\Models\LessonCategory;
@@ -128,6 +129,17 @@ class LessonCategoryController extends Controller
     public function moveDown(LessonCategory $category): RedirectResponse
     {
         $this->swapWithNeighbor(LessonCategory::query(), $category, 'down');
+
+        return back();
+    }
+
+    public function reorder(ReorderRecordsRequest $request): RedirectResponse
+    {
+        $this->applyOrderedIds(
+            LessonCategory::query(),
+            new LessonCategory,
+            $request->validated('ids'),
+        );
 
         return back();
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Concerns\ReordersSortableRecords;
 use App\Concerns\ResolvesContentLocales;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderRecordsRequest;
 use App\Http\Requests\Admin\StoreMangaEpisodeRequest;
 use App\Http\Requests\Admin\UpdateMangaEpisodeRequest;
 use App\Models\MangaCategory;
@@ -107,7 +108,7 @@ class MangaEpisodeController extends Controller
         $episode->load('translations');
 
         $locales = $this->supportedLocales();
-        $locale = $request->string('locale')->toString();
+        $locale = $request->string('page_locale')->toString();
 
         if (! in_array($locale, $locales, true)) {
             $locale = $locales[0] ?? 'ja';
@@ -136,7 +137,7 @@ class MangaEpisodeController extends Controller
             ],
             'categories' => $this->categoryOptions(),
             'locales' => $locales,
-            'locale' => $locale,
+            'pageLocale' => $locale,
             'pages' => $pages,
             'nextPageSortOrder' => (int) $episode->pages()->forLocale($locale)->max('sort_order') + 1,
         ]);
@@ -193,6 +194,17 @@ class MangaEpisodeController extends Controller
     public function moveDown(MangaEpisode $episode): RedirectResponse
     {
         $this->swapWithNeighbor($this->siblingsOf($episode), $episode, 'down');
+
+        return back();
+    }
+
+    public function reorder(ReorderRecordsRequest $request, MangaEpisode $episode): RedirectResponse
+    {
+        $this->applyOrderedIds(
+            $this->siblingsOf($episode),
+            $episode,
+            $request->validated('ids'),
+        );
 
         return back();
     }
