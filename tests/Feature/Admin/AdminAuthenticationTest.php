@@ -33,6 +33,36 @@ class AdminAuthenticationTest extends TestCase
         $response->assertRedirect(route('admin.dashboard', absolute: false));
     }
 
+    public function test_admins_are_not_redirected_to_member_pages_after_login(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $this->get(route('dashboard'));
+
+        $response = $this->post(route('admin.login.store'), [
+            'email' => $admin->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($admin, 'admin');
+        $response->assertRedirect(route('admin.dashboard', absolute: false));
+    }
+
+    public function test_admins_return_to_the_admin_page_they_tried_to_open(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $this->get(route('admin.members.index'));
+
+        $response = $this->post(route('admin.login.store'), [
+            'email' => $admin->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($admin, 'admin');
+        $response->assertRedirect(route('admin.members.index', absolute: false));
+    }
+
     public function test_admins_can_not_authenticate_with_invalid_password(): void
     {
         $admin = Admin::factory()->create();
